@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::view('/compras/nova', 'purchases.create')->name('purchases.create');
     Route::get('/compras/{purchase:sequential}/editar', [PurchaseController::class, 'edit'])->name('purchases.edit');
     Route::get('/compras/{purchase:sequential}/pagaveis', [PurchaseController::class, 'payables'])->name('purchases.payables');
+    Route::post('/compras/{purchase:sequential}/pagaveis', [PurchaseController::class, 'savePayables'])->name('purchases.savePayables');
     Route::put('/compras/{purchase:sequential}', [PurchaseController::class, 'update'])->name('purchases.update');
     Route::post('/compras', [PurchaseController::class, 'store'])->name('purchases.store');
     Route::view('/secoes', 'sections.index')->name('sections.index');

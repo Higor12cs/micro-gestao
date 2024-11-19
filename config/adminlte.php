@@ -330,11 +330,13 @@ return [
         [
             'text' => 'Pedidos',
             'url' => '#',
+            'label' => 'Em Breve',
             'icon' => 'nav-icon fas fa-shopping-basket',
         ],
         [
             'text' => 'Condicionais',
             'url' => '#',
+            'label' => 'Em Breve',
             'icon' => 'nav-icon fas fa-shopping-bag',
         ],
 
@@ -360,6 +362,7 @@ return [
                 [
                     'text' => 'Contas a Receber',
                     'url' => '#',
+                    'label' => 'Em Breve',
                     'icon' => 'nav-icon fas fa-angle-double-down',
                 ],
                 [
@@ -370,6 +373,7 @@ return [
                 [
                     'text' => 'Contas e Caixas',
                     'url' => '#',
+                    'label' => 'Em Breve',
                     'icon' => 'nav-icon fas fa-university',
                 ],
             ],
@@ -385,6 +389,7 @@ return [
         [
             'text' => 'Kardex',
             'url' => '#',
+            'label' => 'Em Breve',
             'icon' => 'nav-icon fas fa-dolly',
         ],
         [
@@ -423,16 +428,19 @@ return [
                 [
                     'text' => 'Vendas',
                     'url' => '#',
+                    'label' => 'Em Breve',
                     'icon' => 'nav-icon fas fa-chart-line',
                 ],
                 [
                     'text' => 'Financeiro',
                     'url' => '#',
+                    'label' => 'Em Breve',
                     'icon' => 'nav-icon fas fa-chart-line',
                 ],
                 [
                     'text' => 'Estoque',
                     'url' => '#',
+                    'label' => 'Em Breve',
                     'icon' => 'nav-icon fas fa-chart-line',
                 ],
             ],
@@ -448,11 +456,13 @@ return [
         [
             'text' => 'Permissões',
             'url' => '#',
+            'label' => 'Em Breve',
             'icon' => 'nav-icon fas fa-lock',
         ],
         [
             'text' => 'Configurações',
             'url' => '#',
+            'label' => 'Em Breve',
             'icon' => 'nav-icon fas fa-cogs',
         ],
     ],
@@ -519,6 +529,16 @@ return [
                     'type' => 'js',
                     'asset' => true,
                     'location' => 'vendor/inputmask/jquery.inputmask.min.js',
+                ],
+            ],
+        ],
+        'moment' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/moment/moment.min.js',
                 ],
             ],
         ],

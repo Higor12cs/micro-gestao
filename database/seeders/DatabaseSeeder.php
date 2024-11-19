@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
 
         $tenant->users()->create([
             'sequential' => 1,
-            'name' => 'Test User',
+            'name' => 'Higor Carneiro',
             'email' => 'test@example.com',
             'password' => bcrypt('password'),
         ]);
