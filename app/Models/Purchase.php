@@ -49,18 +49,18 @@ class Purchase extends Model
 
     public function items(): HasMany
     {
-        return $this->hasMany(StockMovement::class, 'purchase_id')
-            ->where('tenant_id', $this->tenant_id);
+        return $this->hasMany(StockMovement::class, 'purchase_id');
     }
 
     public function payables(): HasMany
     {
-        return $this->hasMany(Payable::class, 'purchase_id')
-            ->where('tenant_id', $this->tenant_id);
+        return $this->hasMany(Payable::class, 'purchase_id');
     }
 
     public function hasPayables(): bool
     {
-        return $this->payables()->exists();
+        return $this->relationLoaded('payables')
+            ? $this->payables->isNotEmpty()
+            : $this->payables()->exists();
     }
 }

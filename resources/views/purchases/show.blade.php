@@ -33,7 +33,57 @@
         </div>
 
         <div class="card-body">
-            <livewire:purchase-item-section :purchase="$purchase" />
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-striped text-nowrap">
+                    <thead>
+                        <tr>
+                            <th class="col-1">Código</th>
+                            <th class="col-7">Produto</th>
+                            <th class="col-1 text-right">Quantidade</th>
+                            <th class="col-1 text-right">Valor Unit.</th>
+                            <th class="col-1 text-right">Valor Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($purchase->items as $item)
+                            <tr>
+                                <td>{{ $item->product->sequential }}</td>
+                                <td>{{ $item->product->name }}</td>
+                                <td class="text-right">{{ number_format($item->quantity, 2, ',', '.') }}</td>
+                                <td class="text-right">R$ {{ number_format($item->unit_price, 2, ',', '.') }}</td>
+                                <td class="text-right">R$ {{ number_format($item->total_price, 2, ',', '.') }}</td>
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <td colspan="4">Total</td>
+                            <td class="text-right">R$ {{ number_format($purchase->total, 2, ',', '.') }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <hr>
+
+            <div class="table-responsive pt-3">
+                <table class="table table-bordered table-hover table-striped text-nowrap">
+                    <thead>
+                        <tr>
+                            <th class="col-2">Código</th>
+                            <th class="col-5">Vencimento</th>
+                            <th class="col-5 text-right">Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($purchase->payables as $payable)
+                            <tr>
+                                <td>{{ $payable->sequential }}</td>
+                                <td>{{ $payable->due_date->format('d/m/Y') }}</td>
+                                <td class="text-right">R$ {{ number_format($payable->amount, 2, ',', '.') }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 @stop

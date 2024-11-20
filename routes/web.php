@@ -15,31 +15,28 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::middleware('auth')->group(function () {
-    // Home
     Route::view('/home', 'home.index')->name('home.index');
     Route::view('/dashboard', 'dashboard.index')->name('dashboard.index');
 
-    // Cadastros
     Route::view('/clientes', 'customers.index')->name('customers.index');
     Route::view('/fornecedores', 'suppliers.index')->name('suppliers.index');
 
-    // Financeiro
     Route::view('/contas-a-pagar', 'payables.index')->name('payables.index');
 
-    // Estoque
     Route::get('/produtos', [ProductController::class, 'index'])->name('products.index');
+
     Route::view('/compras', 'purchases.index')->name('purchases.index');
     Route::view('/compras/nova', 'purchases.create')->name('purchases.create');
-    Route::get('/compras/{purchase:sequential}/editar', [PurchaseController::class, 'edit'])->name('purchases.edit');
-    Route::get('/compras/{purchase:sequential}/pagaveis', [PurchaseController::class, 'payables'])->name('purchases.payables');
-    Route::post('/compras/{purchase:sequential}/pagaveis', [PurchaseController::class, 'savePayables'])->name('purchases.savePayables');
-    Route::put('/compras/{purchase:sequential}', [PurchaseController::class, 'update'])->name('purchases.update');
     Route::post('/compras', [PurchaseController::class, 'store'])->name('purchases.store');
+    Route::get('/compras/{purchase:sequential}/visualizar', [PurchaseController::class, 'show'])->name('purchases.show');
+    Route::get('/compras/{purchase:sequential}/editar', [PurchaseController::class, 'edit'])->name('purchases.edit');
+    Route::get('/compras/{purchase:sequential}/pagaveis', [PurchaseController::class, 'purchasePayables'])->name('purchases.payables');
+    Route::post('/compras/{purchase:sequential}/pagaveis', [PurchaseController::class, 'storePayables'])->name('purchases.store-payables');
+
     Route::view('/secoes', 'sections.index')->name('sections.index');
     Route::view('/grupos', 'groups.index')->name('groups.index');
     Route::view('/marcas', 'brands.index')->name('brands.index');
 
-    // Usuarios
     Route::view('/usuarios', 'users.index')->name('users.index');
 
     // Ajax

@@ -82,8 +82,8 @@ class PurchaseItemSection extends Component
     public function updatedProductId()
     {
         $this->product = Product::findOrFail($this->product_id);
-        $this->unit_price = $this->product->sale_price;
-        $this->total_price = $this->product->sale_price * $this->quantity;
+        $this->unit_price = $this->product->cost_price;
+        $this->total_price = $this->product->cost_price * $this->quantity;
     }
 
     private function updateOrderValues()

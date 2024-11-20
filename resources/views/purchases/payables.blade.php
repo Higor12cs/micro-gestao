@@ -39,7 +39,7 @@
         </div>
 
         <div class="card-body">
-            <form id="payables-form" method="POST" action="{{ route('purchases.savePayables', $purchase->sequential) }}">
+            <form id="payables-form" method="POST" action="{{ route('purchases.store-payables', $purchase->sequential) }}">
                 @csrf
 
                 <div class="row">
@@ -86,7 +86,7 @@
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
                 <div class="d-flex justify-content-between mt-3">
-                    <button type="submit" id="save-payables" class="btn btn-primary" disabled>Salvar Pagáveis</button>
+                    <button type="submit" id="store-payables" class="btn btn-primary" disabled>Salvar Pagáveis</button>
                     <h5 class="mt-auto">Total das Parcelas: <span id="total-sum">R$ 0,00</span></h5>
                 </div>
             </form>
@@ -121,7 +121,7 @@
 
             const toggleSaveButton = () => {
                 const hasRows = $('#payables-table tr').length > 0;
-                $('#save-payables').prop('disabled', !hasRows);
+                $('#store-payables').prop('disabled', !hasRows);
             };
 
             $('#generate-payables').on('click', function() {

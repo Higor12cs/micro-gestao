@@ -12,7 +12,7 @@ class PurchaseController extends Controller
     public function index()
     {
         $query = Purchase::query()
-            ->with('supplier')
+            ->with(['supplier', 'payables'])
             ->where('tenant_id', auth()->user()->tenant->id)
             ->select('purchases.*');
 
@@ -24,13 +24,15 @@ class PurchaseController extends Controller
                 return $purchase->date->format('d/m/Y');
             })
             ->editColumn('total', function ($purchase) {
-                return number_format($purchase->total, 2, '.', ',');
+                return 'R$ ' . number_format($purchase->total, 2, ',', '.');
             })
             ->addColumn('supplier', function ($purchase) {
                 return $purchase->supplier->legal_name ?? $purchase->supplier->first_name;
             })
             ->addColumn('finished', function ($purchase) {
-                return view('partials.bool', ['bool' => $purchase->hasPayables()]);
+                return view('partials.bool', [
+                    'bool' => $purchase->hasPayables(),
+                ]);
             })
             ->addColumn('actions', function ($purchase) {
                 return view('partials.actions', [
@@ -38,6 +40,7 @@ class PurchaseController extends Controller
                     'entity' => 'purchases',
                     'modal' => false,
                     'sequential' => $purchase->sequential,
+                    'edit' => !$purchase->hasPayables(),
                 ]);
             })
             ->make(true);
@@ -60,7 +63,7 @@ class PurchaseController extends Controller
             ->where('sequential', $sequential)
             ->firstOrFail();
 
-        return response()->json($purchase);
+        return view('purchases.show', compact('purchase'));
     }
 
     public function edit(string $sequential)
@@ -75,32 +78,23 @@ class PurchaseController extends Controller
 
     public function update(PurchaseRequest $request, string $sequential)
     {
-        $purchase = Purchase::query()
-            ->where('tenant_id', auth()->user()->tenant->id)
-            ->where('sequential', $sequential)
-            ->firstOrFail();
-
-        $data = $request->validated();
-        $data['active'] = $request->has('active') && $request->input('active') === 'on' ? true : false;
-
-        $purchase->update($data);
-
-        return response()->json($purchase);
+        abort(501);
     }
 
     public function destroy(string $sequential)
     {
-        $purchase = Purchase::query()
-            ->where('tenant_id', auth()->user()->tenant->id)
-            ->where('sequential', $sequential)
-            ->firstOrFail();
+        abort(501);
+        // $purchase = Purchase::query()
+        //     ->where('tenant_id', auth()->user()->tenant->id)
+        //     ->where('sequential', $sequential)
+        //     ->firstOrFail();
 
-        $purchase->delete();
+        // $purchase->delete();
 
-        return response()->json(null, 204);
+        // return response()->json(null, 204);
     }
 
-    public function payables(string $sequential)
+    public function purchasePayables(string $sequential)
     {
         $purchase = Purchase::query()
             ->where('tenant_id', auth()->user()->tenant->id)
@@ -110,7 +104,7 @@ class PurchaseController extends Controller
         return view('purchases.payables', compact('purchase'));
     }
 
-    public function savePayables(Request $request, string $sequential)
+    public function storePayables(Request $request, string $sequential)
     {
         if (! $request->has('payables')) {
             return back()->withErrors(['payables' => 'É necessário cadastrar ao menos uma parcela.']);
