@@ -7,11 +7,19 @@ use App\Models\Brand;
 use App\Models\Group;
 use App\Models\Product;
 use App\Models\Section;
+use App\Traits\TenantAuthorization;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
 class ProductController extends Controller
 {
+    use TenantAuthorization;
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function search(Request $request)
     {
         $products = Product::query()
@@ -19,14 +27,8 @@ class ProductController extends Controller
             ->where('tenant_id', auth()->user()->tenant->id)
             ->where('name', 'like', "%{$request->input('search')}%")
             ->limit(10)
-            ->get();
-
-        $products = $products->map(function ($product) {
-            return [
-                'id' => $product->id,
-                'text' => $product->name,
-            ];
-        });
+            ->get()
+            ->map(fn ($product) => ['id' => $product->id, 'text' => $product->name]);
 
         return response()->json($products);
     }
@@ -39,35 +41,19 @@ class ProductController extends Controller
                 ->where('tenant_id', auth()->user()->tenant->id)
                 ->select('products.*');
 
-            return DataTables::make($query)
-                ->editColumn('sequential', function ($product) {
-                    return str_pad($product->sequential, 5, '0', STR_PAD_LEFT);
-                })
-                ->editColumn('active', function ($product) {
-                    return view('partials.active', [
-                        'active' => $product->active,
-                    ]);
-                })
-                ->addColumn('actions', function ($product) {
-                    return view('partials.actions', [
-                        'id' => $product->id,
-                        'entity' => 'products',
-                    ]);
-                })
+            return DataTables::of($query)
+                ->editColumn('sequential', fn ($product) => str_pad($product->sequential, 5, '0', STR_PAD_LEFT))
+                ->editColumn('active', fn ($product) => view('partials.active', ['active' => $product->active]))
+                ->addColumn('actions', fn ($product) => view('partials.actions', [
+                    'id' => $product->id,
+                    'entity' => 'products',
+                ]))
                 ->make(true);
         }
 
-        $sections = Section::query()
-            ->where('tenant_id', auth()->user()->tenant->id)
-            ->get();
-
-        $groups = Group::query()
-            ->where('tenant_id', auth()->user()->tenant->id)
-            ->get();
-
-        $brands = Brand::query()
-            ->where('tenant_id', auth()->user()->tenant->id)
-            ->get();
+        $sections = Section::where('tenant_id', auth()->user()->tenant->id)->get();
+        $groups = Group::where('tenant_id', auth()->user()->tenant->id)->get();
+        $brands = Brand::where('tenant_id', auth()->user()->tenant->id)->get();
 
         return view('products.index', compact('sections', 'groups', 'brands'));
     }
@@ -76,30 +62,42 @@ class ProductController extends Controller
     {
         $data = $request->validated();
         $data['tenant_id'] = auth()->user()->tenant->id;
-        $data['active'] = $request->has('active') && $request->input('active') === 'on' ? true : false;
+        $data['active'] = $request->boolean('active');
 
         $product = Product::create($data);
 
         return response()->json($product, 201);
     }
 
-    public function show(Product $product)
+    public function show(string $sequential)
     {
+        $product = Product::where('tenant_id', auth()->user()->tenant->id)
+            ->where('sequential', $sequential)
+            ->firstOrFail();
+
         return response()->json($product);
     }
 
-    public function update(ProductRequest $request, Product $product)
+    public function update(ProductRequest $request, string $sequential)
     {
+        $product = Product::where('tenant_id', auth()->user()->tenant->id)
+            ->where('sequential', $sequential)
+            ->firstOrFail();
+
         $data = $request->validated();
-        $data['active'] = $request->has('active') && $request->input('active') === 'on' ? true : false;
+        $data['active'] = $request->boolean('active');
 
         $product->update($data);
 
         return response()->json($product);
     }
 
-    public function destroy(Product $product)
+    public function destroy(string $sequential)
     {
+        $product = Product::where('tenant_id', auth()->user()->tenant->id)
+            ->where('sequential', $sequential)
+            ->firstOrFail();
+
         $product->delete();
 
         return response()->json(null, 204);

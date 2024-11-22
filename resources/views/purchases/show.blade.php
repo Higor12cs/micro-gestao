@@ -33,8 +33,8 @@
         </div>
 
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover table-striped text-nowrap">
+            <div class="table-responsive text-nowrap">
+                <table class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
                             <th class="col-1">Código</th>
@@ -65,7 +65,7 @@
             <hr>
 
             <div class="table-responsive pt-3">
-                <table class="table table-bordered table-hover table-striped text-nowrap">
+                <table class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
                             <th class="col-2">Código</th>

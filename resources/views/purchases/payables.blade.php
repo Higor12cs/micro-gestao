@@ -39,7 +39,7 @@
         </div>
 
         <div class="card-body">
-            <form id="payables-form" method="POST" action="{{ route('purchases.store-payables', $purchase->sequential) }}">
+            <form id="payables-form" method="POST" action="{{ route('purchases.payables.store', $purchase->sequential) }}">
                 @csrf
 
                 <div class="row">
@@ -82,9 +82,11 @@
                         @endif
                     </tbody>
                 </table>
+                
                 @error('payables')
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
+
                 <div class="d-flex justify-content-between mt-3">
                     <button type="submit" id="store-payables" class="btn btn-primary" disabled>Salvar Pagáveis</button>
                     <h5 class="mt-auto">Total das Parcelas: <span id="total-sum">R$ 0,00</span></h5>

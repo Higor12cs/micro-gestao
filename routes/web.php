@@ -6,6 +6,8 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\PayableController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\PurchaseItemsController;
+use App\Http\Controllers\PurchasePayablesController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
@@ -21,21 +23,22 @@ Route::middleware('auth')->group(function () {
     Route::view('/clientes', 'customers.index')->name('customers.index');
     Route::view('/fornecedores', 'suppliers.index')->name('suppliers.index');
 
-    Route::view('/contas-a-pagar', 'payables.index')->name('payables.index');
+    Route::view('/pagaveis', 'payables.index')->name('payables.index');
 
     Route::get('/produtos', [ProductController::class, 'index'])->name('products.index');
 
-    Route::view('/compras', 'purchases.index')->name('purchases.index');
+    Route::get('/compras', [PurchaseController::class, 'index'])->name('purchases.index');
     Route::view('/compras/nova', 'purchases.create')->name('purchases.create');
     Route::post('/compras', [PurchaseController::class, 'store'])->name('purchases.store');
-    Route::get('/compras/{purchase:sequential}/visualizar', [PurchaseController::class, 'show'])->name('purchases.show');
-    Route::get('/compras/{purchase:sequential}/editar', [PurchaseController::class, 'edit'])->name('purchases.edit');
-    Route::get('/compras/{purchase:sequential}/pagaveis', [PurchaseController::class, 'purchasePayables'])->name('purchases.payables');
-    Route::post('/compras/{purchase:sequential}/pagaveis', [PurchaseController::class, 'storePayables'])->name('purchases.store-payables');
-
-    Route::get('/purchases/{purchase}/items', [PurchaseController::class, 'items']);
-    Route::post('/purchases/{purchase}/items', [PurchaseController::class, 'addItem']);
-    Route::delete('/purchases/{purchase}/items/{item}', [PurchaseController::class, 'deleteItem']);
+    Route::get('/compras/{sequential}', [PurchaseController::class, 'show'])->name('purchases.show');
+    Route::get('/compras/{sequential}/editar', [PurchaseController::class, 'edit'])->name('purchases.edit');
+    Route::put('/compras/{sequential}', [PurchaseController::class, 'update'])->name('purchases.update');
+    Route::delete('/compras/{sequential}', [PurchaseController::class, 'destroy'])->name('purchases.destroy');
+    Route::get('/compras/{purchase}/itens', [PurchaseItemsController::class, 'index'])->name('purchases.items.index');
+    Route::post('/compras/{purchase}/itens', [PurchaseItemsController::class, 'store'])->name('purchases.items.store');
+    Route::delete('/compras/{purchase}/itens/{item}', [PurchaseItemsController::class, 'destroy'])->name('purchases.items.destroy');
+    Route::get('/compras/{purchase:sequential}/pagaveis', [PurchasePayablesController::class, 'index'])->name('purchases.payables.index');
+    Route::post('/compras/{purchase:sequential}/pagaveis', [PurchasePayablesController::class, 'store'])->name('purchases.payables.store');
 
     Route::view('/secoes', 'sections.index')->name('sections.index');
     Route::view('/grupos', 'groups.index')->name('groups.index');
@@ -43,7 +46,6 @@ Route::middleware('auth')->group(function () {
 
     Route::view('/usuarios', 'users.index')->name('users.index');
 
-    // Ajax
     Route::prefix('/ajax')->as('ajax.')->group(function () {
         Route::get('/customers/search', [CustomerController::class, 'search'])->name('customers.search');
         Route::get('/suppliers/search', [SupplierController::class, 'search'])->name('suppliers.search');

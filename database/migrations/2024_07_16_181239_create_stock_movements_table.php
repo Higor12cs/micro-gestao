@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('stock_movements', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignUuid('tenant_id')->constrained();
-            $table->foreignUuid('product_id')->constrained();
-            $table->foreignUuid('order_id')->nullable()->constrained();
-            $table->foreignUuid('trial_id')->nullable()->constrained();
-            $table->foreignUuid('purchase_id')->nullable()->constrained();
+            $table->foreignUlid('tenant_id')->constrained();
+            $table->foreignUlid('product_id')->constrained();
+            $table->foreignUlid('order_id')->nullable()->constrained();
+            $table->foreignUlid('trial_id')->nullable()->constrained();
+            $table->foreignUlid('purchase_id')->nullable()->constrained();
             $table->decimal('quantity', 10, 2)->default(0);
             $table->decimal('unit_cost', 10, 2)->default(0);
             $table->decimal('total_cost', 10, 2)->default(0);
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->decimal('total_price', 10, 2)->default(0);
             $table->enum('type', ['in', 'out', 'adjustment', 'initial'])->default('in');
             $table->text('observation')->nullable();
-            $table->foreignUuid('created_by')->constrained('users');
+            $table->foreignUlid('created_by')->constrained('users');
             $table->timestamps();
         });
     }

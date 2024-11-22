@@ -25,9 +25,9 @@
             <span class="">Lista de Grupos</span>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
+            <div class="table-responsive text-nowrap">
                 <table id="groups-table" class="table data-table table-striped table-bordered" style="width:100%">
-                    <thead class="text-nowrap">
+                    <thead>
                         <tr>
                             <th class="col-1">Código</th>
                             <th class="col-9">Nome</th>

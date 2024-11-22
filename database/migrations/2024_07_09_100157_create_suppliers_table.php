@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('suppliers', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('tenant_id')->constrained();
+            $table->ulid('id')->primary();
+            $table->foreignUlid('tenant_id')->constrained();
             $table->unsignedBigInteger('sequential');
             $table->string('first_name');
             $table->string('last_name')->nullable();
@@ -33,7 +33,7 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->string('state')->nullable();
             $table->string('country')->nullable();
-            $table->foreignUuid('created_by')->constrained('users');
+            $table->foreignUlid('created_by')->constrained('users');
             $table->timestamps();
         });
     }

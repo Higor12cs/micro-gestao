@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasSequentialFieldTrait;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Purchase extends Model
 {
-    use HasFactory, HasSequentialFieldTrait, HasUuids;
+    use HasFactory, HasSequentialFieldTrait, HasUlids;
 
     protected $fillable = [
         'tenant_id',

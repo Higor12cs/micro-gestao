@@ -31,14 +31,14 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped text-nowrap">
+            <div class="table-responsive text-nowrap">
+                <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th class="col-8">Produto</th>
+                            <th class="col-6">Produto</th>
                             <th class="col-1">Quantidade</th>
-                            <th class="col-1">Valor Unitário</th>
-                            <th class="col-1">Valor Total</th>
+                            <th class="col-2">Valor Unitário</th>
+                            <th class="col-2">Valor Total</th>
                             <th class="col-1">Ações</th>
                         </tr>
                     </thead>
@@ -68,7 +68,7 @@
 
             <h5 id="total-display" class="mt-3">Total: R$ 0,00</h5>
 
-            <a href="{{ route('purchases.payables', $purchase->sequential) }}" class="btn btn-primary mt-3">Contas a
+            <a href="{{ route('purchases.payables.index', $purchase->sequential) }}" class="btn btn-primary mt-3">Contas a
                 Pagar</a>
         </div>
     </div>
@@ -90,7 +90,7 @@
             const purchaseId = "{{ $purchase->id }}";
 
             const fetchItems = () => {
-                $.get(`/purchases/${purchaseId}/items`, function(data) {
+                $.get(`/compras/${purchaseId}/itens`, function(data) {
                     let html = '';
                     let total = 0;
 
@@ -144,7 +144,7 @@
                 const productName = e.params.data.text;
 
                 $.get(`/ajax/products/${productId}`, function(product) {
-                    $('#new-unit-price').val(product.cost_price);
+                    $('#new-unit-price').val(parseFloat(product.cost_price).toFixed(2));
                     updateTotalPrice();
                 });
             });
@@ -173,7 +173,7 @@
                     unit_price: unitPrice,
                 };
 
-                $.post(`/purchases/${purchaseId}/items`, formData, function(response) {
+                $.post(`/compras/${purchaseId}/itens`, formData, function(response) {
                     fetchItems();
                     $('#new-product-select').val(null).trigger('change');
                     $('#new-quantity').val(1);
@@ -189,7 +189,7 @@
                 const itemId = $(this).closest('tr').data('id');
 
                 $.ajax({
-                    url: `/purchases/${purchaseId}/items/${itemId}`,
+                    url: `/compras/${purchaseId}/itens/${itemId}`,
                     type: 'DELETE',
                     success: function() {
                         fetchItems();

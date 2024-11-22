@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('stocks', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignUuid('tenant_id')->constrained();
-            $table->foreignUuid('product_id')->constrained();
+            $table->foreignUlid('tenant_id')->constrained();
+            $table->foreignUlid('product_id')->constrained();
             $table->decimal('stock_total', 10, 2)->default(0);
             $table->decimal('stock_on_trial', 10, 2)->default(0);
             $table->decimal('stock_available', 10, 2)->default(0);

@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('payables', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignUuid('tenant_id')->constrained();
+            $table->foreignUlid('tenant_id')->constrained();
             $table->unsignedBigInteger('sequential');
-            $table->foreignUuid('supplier_id')->constrained();
+            $table->foreignUlid('supplier_id')->constrained();
             $table->foreignUlid('purchase_id')->nullable()->constrained();
             $table->date('due_date');
             $table->decimal('amount', 10, 2)->default(0);
             $table->decimal('paid_amount', 10, 2)->default(0);
             $table->date('paid_at')->nullable();
-            $table->foreignUuid('paid_by')->nullable()->constrained('users');
+            $table->foreignUlid('paid_by')->nullable()->constrained('users');
             $table->enum('status', ['pending', 'paid'])->default('pending');
-            $table->foreignUuid('created_by')->constrained('users');
+            $table->foreignUlid('created_by')->constrained('users');
             $table->timestamps();
         });
     }
