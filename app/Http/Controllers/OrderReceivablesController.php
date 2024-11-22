@@ -23,6 +23,14 @@ class OrderReceivablesController extends Controller
             'receivables.*.amount' => 'required|numeric|min:0.01',
         ]);
 
+        $totalAmount = collect($request->input('receivables'))->sum('amount');
+
+        if ($totalAmount != $order->total_amount) {
+            return back()
+                ->withInput()
+                ->with('receivables', 'O valor total das parcelas deve ser igual ao valor total do pedido.');
+        }
+
         $receivables = collect($request->input('receivables'))->map(fn ($receivable) => array_merge($receivable, [
             'tenant_id' => $order->tenant_id,
             'customer_id' => $order->customer_id,

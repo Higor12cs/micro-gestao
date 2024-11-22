@@ -359,13 +359,12 @@ return [
             'icon' => 'nav-icon fas fa-piggy-bank',
             'submenu' => [
                 [
-                    'text' => 'Contas a Receber',
-                    'url' => '#',
-                    'label' => 'Em Breve',
+                    'text' => 'Recebíveis',
+                    'route' => 'receivables.index',
                     'icon' => 'nav-icon fas fa-angle-double-down',
                 ],
                 [
-                    'text' => 'Contas a Pagar',
+                    'text' => 'Pagáveis',
                     'route' => 'payables.index',
                     'icon' => 'nav-icon fas fa-angle-double-up',
                 ],

@@ -29,6 +29,14 @@ class PurchasePayablesController extends Controller
             'created_by' => auth()->id(),
         ]));
 
+        $totalAmount = collect($request->input('payables'))->sum('amount');
+
+        if ($totalAmount != $order->total_amount) {
+            return back()
+                ->withInput()
+                ->with('payables', 'O valor total das parcelas deve ser igual ao valor total da compra.');
+        }
+
         $purchase->payables()->createMany($payables->toArray());
 
         return to_route('purchases.index')

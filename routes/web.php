@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PurchaseItemsController;
 use App\Http\Controllers\PurchasePayablesController;
+use App\Http\Controllers\ReceivableController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
@@ -27,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::view('/fornecedores', 'suppliers.index')->name('suppliers.index');
 
     Route::view('/pagaveis', 'payables.index')->name('payables.index');
+    Route::view('/recebiveis', 'receivables.index')->name('receivables.index');
 
     Route::get('/produtos', [ProductController::class, 'index'])->name('products.index');
 
@@ -74,6 +76,7 @@ Route::middleware('auth')->group(function () {
         Route::apiResource('/customers', CustomerController::class);
         Route::apiResource('/suppliers', SupplierController::class);
         Route::apiResource('/payables', PayableController::class);
+        Route::apiResource('/receivables', ReceivableController::class);
         Route::apiResource('/products', ProductController::class);
         Route::apiResource('/orders', OrderController::class);
         Route::apiResource('/purchases', PurchaseController::class);

@@ -1,17 +1,17 @@
 @extends('adminlte::page')
 
-@section('title', 'Pagáveis')
+@section('title', 'Recebíveis')
 
 @section('plugins.Datatables', true)
 
 @section('content_header')
     <div class="d-flex justify-content-between">
         <div>
-            <h4>Pagáveis</h4>
+            <h4>Recebíveis</h4>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('home.index') }}">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Pagáveis</li>
+                    <li class="breadcrumb-item active" aria-current="page">Recebíveis</li>
                 </ol>
             </nav>
         </div>
@@ -22,15 +22,15 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <span class="">Lista de Pagáveis</span>
+            <span class="">Lista de Recebíveis</span>
         </div>
         <div class="card-body">
             <div class="table-responsive text-nowrap">
-                <table id="payables-table" class="table data-table table-striped table-bordered" style="width:100%">
+                <table id="receivables-table" class="table data-table table-striped table-bordered" style="width:100%">
                     <thead>
                         <tr>
                             <th class="col-1">Código</th>
-                            <th class="col-7">Fornecedor</th>
+                            <th class="col-7">Cliente</th>
                             <th class="col-1">Data Vencimento</th>
                             <th class="col-1">Pago?</th>
                             <th class="col-1">Valor</th>
@@ -56,7 +56,7 @@
     <script src="{{ asset('js/crud.js') }}" type="module"></script>
     <script>
         $(document).ready(function() {
-            $('#payables-table').DataTable({
+            $('#receivables-table').DataTable({
                 order: [
                     [0, 'desc']
                 ],
@@ -65,14 +65,14 @@
                 },
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('ajax.payables.index') }}',
+                ajax: '{{ route('ajax.receivables.index') }}',
                 columns: [{
                         data: 'sequential',
                         name: 'sequential'
                     },
                     {
-                        data: 'supplier',
-                        name: 'supplier'
+                        data: 'customer',
+                        name: 'customer'
                     },
                     {
                         data: 'due_date',
