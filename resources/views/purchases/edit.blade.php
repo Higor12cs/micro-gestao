@@ -37,7 +37,7 @@
                         <tr>
                             <th class="col-6">Produto</th>
                             <th class="col-1">Quantidade</th>
-                            <th class="col-2">Valor Unitário</th>
+                            <th class="col-2">Valor Unit.</th>
                             <th class="col-2">Valor Total</th>
                             <th class="col-1">Ações</th>
                         </tr>

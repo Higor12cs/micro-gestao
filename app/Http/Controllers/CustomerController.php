@@ -31,7 +31,7 @@ class CustomerController extends Controller
             ->get(['id', 'first_name']);
 
         return response()->json(
-            $customers->map(fn ($customer) => ['id' => $customer->id, 'text' => $customer->first_name])
+            $customers->map(fn($customer) => ['id' => $customer->id, 'text' => $customer->first_name])
         );
     }
 
@@ -41,8 +41,12 @@ class CustomerController extends Controller
             $query = Customer::where('tenant_id', auth()->user()->tenant->id);
 
             return DataTables::of($query)
-                ->editColumn('sequential', fn ($customer) => str_pad($customer->sequential, 5, '0', STR_PAD_LEFT))
-                ->addColumn('actions', fn ($customer) => view('partials.actions', ['id' => $customer->id, 'entity' => 'customers']))
+                ->editColumn('sequential', fn($customer) => str_pad($customer->sequential, 5, '0', STR_PAD_LEFT))
+                ->addColumn('actions', fn($customer) => view('partials.actions', [
+                    'id' => $customer->id,
+                    'sequential' => $customer->sequential,
+                    'entity' => 'customers'
+                ]))
                 ->make(true);
         }
 

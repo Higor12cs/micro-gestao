@@ -27,7 +27,7 @@ class BrandController extends Controller
             ->get(['id', 'name']);
 
         return response()->json(
-            $brands->map(fn ($brand) => ['id' => $brand->id, 'text' => $brand->name])
+            $brands->map(fn($brand) => ['id' => $brand->id, 'text' => $brand->name])
         );
     }
 
@@ -37,9 +37,13 @@ class BrandController extends Controller
             $query = Brand::where('tenant_id', auth()->user()->tenant->id);
 
             return DataTables::of($query)
-                ->editColumn('sequential', fn ($brand) => str_pad($brand->sequential, 5, '0', STR_PAD_LEFT))
-                ->editColumn('active', fn ($brand) => view('partials.active', ['active' => $brand->active]))
-                ->addColumn('actions', fn ($brand) => view('partials.actions', ['id' => $brand->id, 'entity' => 'brands']))
+                ->editColumn('sequential', fn($brand) => str_pad($brand->sequential, 5, '0', STR_PAD_LEFT))
+                ->editColumn('active', fn($brand) => view('partials.active', ['active' => $brand->active]))
+                ->addColumn('actions', fn($brand) => view('partials.actions', [
+                    'id' => $brand->id,
+                    'sequential' => $brand->sequential,
+                    'entity' => 'brands'
+                ]))
                 ->make(true);
         }
 

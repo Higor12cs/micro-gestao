@@ -41,6 +41,7 @@ class UserController extends Controller
             ->editColumn('active', fn ($user) => view('partials.active', ['active' => $user->active]))
             ->addColumn('actions', fn ($user) => view('partials.actions', [
                 'id' => $user->id,
+                'sequential' => $user->sequential,
                 'entity' => 'users',
             ]))
             ->make(true);

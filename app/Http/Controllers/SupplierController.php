@@ -27,7 +27,7 @@ class SupplierController extends Controller
             })
             ->limit(10)
             ->get()
-            ->map(fn ($supplier) => [
+            ->map(fn($supplier) => [
                 'id' => $supplier->id,
                 'text' => $supplier->first_name,
             ]);
@@ -35,17 +35,22 @@ class SupplierController extends Controller
         return response()->json($suppliers);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $query = Supplier::where('tenant_id', auth()->user()->tenant->id);
+        if ($request->ajax()) {
+            $query = Supplier::where('tenant_id', auth()->user()->tenant->id);
 
-        return DataTables::of($query)
-            ->editColumn('sequential', fn ($supplier) => str_pad($supplier->sequential, 5, '0', STR_PAD_LEFT))
-            ->addColumn('actions', fn ($supplier) => view('partials.actions', [
-                'id' => $supplier->id,
-                'entity' => 'suppliers',
-            ]))
-            ->make(true);
+            return DataTables::of($query)
+                ->editColumn('sequential', fn($supplier) => str_pad($supplier->sequential, 5, '0', STR_PAD_LEFT))
+                ->addColumn('actions', fn($supplier) => view('partials.actions', [
+                    'id' => $supplier->id,
+                    'sequential' => $supplier->sequential,
+                    'entity' => 'suppliers',
+                ]))
+                ->make(true);
+        }
+
+        return view('suppliers.index');
     }
 
     public function store(SupplierRequest $request)
@@ -58,31 +63,25 @@ class SupplierController extends Controller
         return response()->json($supplier, 201);
     }
 
-    public function show(string $sequential)
+    public function show(Supplier $supplier)
     {
-        $supplier = Supplier::where('tenant_id', auth()->user()->tenant->id)
-            ->where('sequential', $sequential)
-            ->firstOrFail();
+        $this->authorizeTenantAccess($supplier);
 
         return response()->json($supplier);
     }
 
-    public function update(SupplierRequest $request, string $sequential)
+    public function update(SupplierRequest $request, Supplier $supplier)
     {
-        $supplier = Supplier::where('tenant_id', auth()->user()->tenant->id)
-            ->where('sequential', $sequential)
-            ->firstOrFail();
+        $this->authorizeTenantAccess($supplier);
 
         $supplier->update($request->validated());
 
         return response()->json($supplier);
     }
 
-    public function destroy(string $sequential)
+    public function destroy(Supplier $supplier)
     {
-        $supplier = Supplier::where('tenant_id', auth()->user()->tenant->id)
-            ->where('sequential', $sequential)
-            ->firstOrFail();
+        $this->authorizeTenantAccess($supplier);
 
         $supplier->delete();
 

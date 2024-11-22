@@ -23,23 +23,28 @@ class SectionController extends Controller
             ->where('name', 'like', "%{$request->input('search')}%")
             ->limit(10)
             ->get()
-            ->map(fn ($section) => ['id' => $section->id, 'text' => $section->name]);
+            ->map(fn($section) => ['id' => $section->id, 'text' => $section->name]);
 
         return response()->json($sections);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $query = Section::where('tenant_id', auth()->user()->tenant->id);
+        if ($request->ajax()) {
+            $query = Section::where('tenant_id', auth()->user()->tenant->id);
 
-        return DataTables::of($query)
-            ->editColumn('sequential', fn ($section) => str_pad($section->sequential, 5, '0', STR_PAD_LEFT))
-            ->editColumn('active', fn ($section) => view('partials.active', ['active' => $section->active]))
-            ->addColumn('actions', fn ($section) => view('partials.actions', [
-                'id' => $section->id,
-                'entity' => 'sections',
-            ]))
-            ->make(true);
+            return DataTables::of($query)
+                ->editColumn('sequential', fn($section) => str_pad($section->sequential, 5, '0', STR_PAD_LEFT))
+                ->editColumn('active', fn($section) => view('partials.active', ['active' => $section->active]))
+                ->addColumn('actions', fn($section) => view('partials.actions', [
+                    'id' => $section->id,
+                    'sequential' => $section->sequential,
+                    'entity' => 'sections',
+                ]))
+                ->make(true);
+        }
+
+        return view('sections.index');
     }
 
     public function store(SectionRequest $request)
@@ -53,20 +58,16 @@ class SectionController extends Controller
         return response()->json($section, 201);
     }
 
-    public function show(string $sequential)
+    public function show(Section $section)
     {
-        $section = Section::where('tenant_id', auth()->user()->tenant->id)
-            ->where('sequential', $sequential)
-            ->firstOrFail();
+        $this->authorizeTenantAccess($section);
 
         return response()->json($section);
     }
 
-    public function update(SectionRequest $request, string $sequential)
+    public function update(SectionRequest $request, Section $section)
     {
-        $section = Section::where('tenant_id', auth()->user()->tenant->id)
-            ->where('sequential', $sequential)
-            ->firstOrFail();
+        $this->authorizeTenantAccess($section);
 
         $data = $request->validated();
         $data['active'] = $request->boolean('active');
@@ -76,11 +77,9 @@ class SectionController extends Controller
         return response()->json($section);
     }
 
-    public function destroy(string $sequential)
+    public function destroy(Section $section)
     {
-        $section = Section::where('tenant_id', auth()->user()->tenant->id)
-            ->where('sequential', $sequential)
-            ->firstOrFail();
+        $this->authorizeTenantAccess($section);
 
         $section->delete();
 

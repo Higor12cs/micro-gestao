@@ -22,8 +22,7 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
-        $products = Product::query()
-            ->with('stocks')
+        $products = Product::with('stocks')
             ->where('tenant_id', auth()->user()->tenant->id)
             ->where('name', 'like', "%{$request->input('search')}%")
             ->limit(10)
@@ -36,8 +35,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Product::query()
-                ->with('stocks')
+            $query = Product::with('stocks')
                 ->where('tenant_id', auth()->user()->tenant->id)
                 ->select('products.*');
 
@@ -46,6 +44,7 @@ class ProductController extends Controller
                 ->editColumn('active', fn ($product) => view('partials.active', ['active' => $product->active]))
                 ->addColumn('actions', fn ($product) => view('partials.actions', [
                     'id' => $product->id,
+                    'sequential' => $product->sequential,
                     'entity' => 'products',
                 ]))
                 ->make(true);
@@ -69,34 +68,25 @@ class ProductController extends Controller
         return response()->json($product, 201);
     }
 
-    public function show(string $sequential)
+    public function show(Product $product)
     {
-        $product = Product::where('tenant_id', auth()->user()->tenant->id)
-            ->where('sequential', $sequential)
-            ->firstOrFail();
+        $this->authorizeTenantAccess($product);
 
         return response()->json($product);
     }
 
-    public function update(ProductRequest $request, string $sequential)
+    public function update(ProductRequest $request, Product $product)
     {
-        $product = Product::where('tenant_id', auth()->user()->tenant->id)
-            ->where('sequential', $sequential)
-            ->firstOrFail();
+        $this->authorizeTenantAccess($product);
 
-        $data = $request->validated();
-        $data['active'] = $request->boolean('active');
-
-        $product->update($data);
+        $product->update($request->validated());
 
         return response()->json($product);
     }
 
-    public function destroy(string $sequential)
+    public function destroy(Product $product)
     {
-        $product = Product::where('tenant_id', auth()->user()->tenant->id)
-            ->where('sequential', $sequential)
-            ->firstOrFail();
+        $this->authorizeTenantAccess($product);
 
         $product->delete();
 
