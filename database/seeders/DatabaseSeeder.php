@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
-        for ($i = 1; $i <= 100; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             \App\Models\Supplier::create([
                 'tenant_id' => $tenant->id,
                 'first_name' => 'Fornecedor '.str_pad($i, 3, '0', STR_PAD_LEFT),

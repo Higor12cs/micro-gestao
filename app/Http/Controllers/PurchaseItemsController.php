@@ -26,11 +26,11 @@ class PurchaseItemsController extends Controller
         $validated = $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|numeric|min:1',
-            'unit_price' => 'required|numeric|min:0.01',
+            'unit_cost' => 'required|numeric|min:0.01',
         ]);
 
         $purchase->items()->create(array_merge($validated, [
-            'total_price' => $validated['quantity'] * $validated['unit_price'],
+            'total_cost' => $validated['quantity'] * $validated['unit_cost'],
             'tenant_id' => auth()->user()->tenant->id,
             'created_by' => auth()->id(),
         ]));
@@ -52,6 +52,6 @@ class PurchaseItemsController extends Controller
 
     private function updatePurchaseTotal(Purchase $purchase)
     {
-        $purchase->update(['total' => $purchase->items()->sum('total_price')]);
+        $purchase->update(['total' => $purchase->items()->sum('total_cost')]);
     }
 }

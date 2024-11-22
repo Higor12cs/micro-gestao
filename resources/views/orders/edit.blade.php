@@ -1,22 +1,22 @@
 @extends('adminlte::page')
 
-@section('title', 'Editar Compra')
+@section('title', 'Editar Pedido')
 
 @section('plugins.Select2', true)
 
 @section('content_header')
     <div class="d-flex justify-content-between">
         <div>
-            <h4>Editar Compra #{{ str_pad($purchase->sequential, 5, '0', STR_PAD_LEFT) }}</h4>
+            <h4>Editar Pedido #{{ str_pad($order->sequential, 5, '0', STR_PAD_LEFT) }}</h4>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('home.index') }}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('purchases.index') }}">Compras</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('orders.index') }}">Pedidos</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Editar</li>
                 </ol>
             </nav>
         </div>
-        <a href="{{ route('purchases.index') }}" class="btn btn-secondary create-entity mb-auto">Voltar</a>
+        <a href="{{ route('orders.index') }}" class="btn btn-secondary create-entity mb-auto">Voltar</a>
     </div>
 @stop
 
@@ -24,9 +24,9 @@
     <div class="card">
         <div class="card-header">
             <div class="row">
-                <x-input type="text" name="supplier" label="Fornecedor" value="{{ $purchase->supplier->first_name }}"
+                <x-input type="text" name="customer" label="Fornecedor" value="{{ $order->customer->first_name }}"
                     class="col-md-9" disabled />
-                <x-input type="date" name="date" label="Data" value="{{ $purchase->date->format('Y-m-d') }}"
+                <x-input type="date" name="date" label="Data" value="{{ $order->date->format('Y-m-d') }}"
                     class="col-md-3" disabled />
             </div>
         </div>
@@ -51,7 +51,7 @@
                                 <input type="number" id="new-quantity" class="form-control" min="1" value="1">
                             </td>
                             <td>
-                                <input type="text" id="new-unit_cost" class="form-control" readonly>
+                                <input type="text" id="new-unit_price" class="form-control" readonly>
                             </td>
                             <td>
                                 <input type="text" id="new-total-cost" class="form-control" readonly>
@@ -68,8 +68,8 @@
 
             <h5 id="total-display" class="mt-3">Total: R$ 0,00</h5>
 
-            <a href="{{ route('purchases.payables.index', $purchase->sequential) }}" class="btn btn-primary mt-3">Contas a
-                Pagar</a>
+            <a href="{{ route('orders.receivables.index', $order->sequential) }}" class="btn btn-primary mt-3">Contas a
+                Receber</a>
         </div>
     </div>
 @stop
@@ -87,25 +87,25 @@
                 }
             });
 
-            const purchaseId = "{{ $purchase->id }}";
+            const orderId = "{{ $order->id }}";
 
             const fetchItems = () => {
-                $.get(`/compras/${purchaseId}/itens`, function(data) {
+                $.get(`/pedidos/${orderId}/itens`, function(data) {
                     let html = '';
                     let total = 0;
 
                     data.forEach(item => {
                         const quantity = parseFloat(item.quantity);
-                        const unitCost = parseFloat(item.unit_cost);
-                        const totalCost = parseFloat(item.total_cost);
-                        total += totalCost;
+                        const unitPrice = parseFloat(item.unit_price);
+                        const totalPrice = parseFloat(item.total_price);
+                        total += totalPrice;
 
                         html += `
                             <tr data-id="${item.id}">
                                 <td>${item.product.name}</td>
                                 <td>${quantity.toFixed(2)}</td>
-                                <td>R$ ${unitCost.toFixed(2)}</td>
-                                <td>R$ ${totalCost.toFixed(2)}</td>
+                                <td>R$ ${unitPrice.toFixed(2)}</td>
+                                <td>R$ ${totalPrice.toFixed(2)}</td>
                                 <td>
                                     <button class="btn btn-sm btn-danger delete-item">Excluir</button>
                                 </td>
@@ -144,25 +144,25 @@
                 const productName = e.params.data.text;
 
                 $.get(`/ajax/products/${productId}`, function(product) {
-                    $('#new-unit_cost').val(parseFloat(product.cost_price).toFixed(2));
-                    updatetotalCost();
+                    $('#new-unit_price').val(parseFloat(product.cost_price).toFixed(2));
+                    updatetotalPrice();
                 });
             });
 
-            const updatetotalCost = () => {
+            const updatetotalPrice = () => {
                 const quantity = $('#new-quantity').val();
-                const unitCost = $('#new-unit_cost').val();
-                const totalCost = (quantity * unitCost).toFixed(2);
-                $('#new-total-cost').val(totalCost);
+                const unitPrice = $('#new-unit_price').val();
+                const totalPrice = (quantity * unitPrice).toFixed(2);
+                $('#new-total-cost').val(totalPrice);
             };
-            $('#new-quantity').on('input', updatetotalCost);
+            $('#new-quantity').on('input', updatetotalPrice);
 
             $('#add-item-button').on('click', function() {
                 const productId = $('#new-product-select').val();
                 const quantity = $('#new-quantity').val();
-                const unitCost = $('#new-unit_cost').val();
+                const unitPrice = $('#new-unit_price').val();
 
-                if (!productId || !quantity || !unitCost) {
+                if (!productId || !quantity || !unitPrice) {
                     alert('Preencha todos os campos antes de adicionar.');
                     return;
                 }
@@ -170,14 +170,14 @@
                 const formData = {
                     product_id: productId,
                     quantity: quantity,
-                    unit_cost: unitCost,
+                    unit_price: unitPrice,
                 };
 
-                $.post(`/compras/${purchaseId}/itens`, formData, function(response) {
+                $.post(`/pedidos/${orderId}/itens`, formData, function(response) {
                     fetchItems();
                     $('#new-product-select').val(null).trigger('change');
                     $('#new-quantity').val(1);
-                    $('#new-unit_cost').val('');
+                    $('#new-unit_price').val('');
                     $('#new-total-cost').val('');
                 }).fail(function(xhr) {
                     console.log(xhr);
@@ -190,7 +190,7 @@
                 const itemId = $(this).closest('tr').data('id');
 
                 $.ajax({
-                    url: `/compras/${purchaseId}/itens/${itemId}`,
+                    url: `/pedidos/${orderId}/itens/${itemId}`,
                     type: 'DELETE',
                     success: function() {
                         fetchItems();

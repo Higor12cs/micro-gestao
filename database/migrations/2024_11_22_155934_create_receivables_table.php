@@ -11,17 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('receivables', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('tenant_id')->constrained();
-            $table->foreignUlid('customer_id')->constrained();
             $table->unsignedBigInteger('sequential');
-            $table->date('date');
-            $table->decimal('total_cost', 10, 2)->default(0);
-            $table->decimal('discount', 10, 2)->default(0);
-            $table->decimal('freight', 10, 2)->default(0);
-            $table->decimal('total_price', 10, 2)->default(0);
-            $table->text('observation')->nullable();
+            $table->foreignUlid('customer_id')->constrained();
+            $table->foreignUlid('order_id')->nullable()->constrained();
+            $table->date('due_date');
+            $table->decimal('amount', 10, 2)->default(0);
+            $table->decimal('paid_amount', 10, 2)->default(0);
+            $table->date('paid_at')->nullable();
+            $table->foreignUlid('paid_by')->nullable()->constrained('users');
+            $table->enum('status', ['pending', 'paid'])->default('pending');
             $table->foreignUlid('created_by')->constrained('users');
             $table->timestamps();
         });
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('receivables');
     }
 };

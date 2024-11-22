@@ -3,6 +3,9 @@
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderItemsController;
+use App\Http\Controllers\OrderReceivablesController;
 use App\Http\Controllers\PayableController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
@@ -26,6 +29,19 @@ Route::middleware('auth')->group(function () {
     Route::view('/pagaveis', 'payables.index')->name('payables.index');
 
     Route::get('/produtos', [ProductController::class, 'index'])->name('products.index');
+
+    Route::get('/pedidos', [OrderController::class, 'index'])->name('orders.index');
+    Route::view('/pedidos/nova', 'orders.create')->name('orders.create');
+    Route::post('/pedidos', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/pedidos/{sequential}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/pedidos/{sequential}/editar', [OrderController::class, 'edit'])->name('orders.edit');
+    Route::put('/pedidos/{sequential}', [OrderController::class, 'update'])->name('orders.update');
+    Route::delete('/pedidos/{sequential}', [OrderController::class, 'destroy'])->name('orders.destroy');
+    Route::get('/pedidos/{order}/itens', [OrderItemsController::class, 'index'])->name('orders.items.index');
+    Route::post('/pedidos/{order}/itens', [OrderItemsController::class, 'store'])->name('orders.items.store');
+    Route::delete('/pedidos/{order}/itens/{item}', [OrderItemsController::class, 'destroy'])->name('orders.items.destroy');
+    Route::get('/pedidos/{order:sequential}/recebiveis', [OrderReceivablesController::class, 'index'])->name('orders.receivables.index');
+    Route::post('/pedidos/{order:sequential}/recebiveis', [OrderReceivablesController::class, 'store'])->name('orders.receivables.store');
 
     Route::get('/compras', [PurchaseController::class, 'index'])->name('purchases.index');
     Route::view('/compras/nova', 'purchases.create')->name('purchases.create');
@@ -59,6 +75,7 @@ Route::middleware('auth')->group(function () {
         Route::apiResource('/suppliers', SupplierController::class);
         Route::apiResource('/payables', PayableController::class);
         Route::apiResource('/products', ProductController::class);
+        Route::apiResource('/orders', OrderController::class);
         Route::apiResource('/purchases', PurchaseController::class);
         Route::apiResource('/sections', SectionController::class);
         Route::apiResource('/groups', GroupController::class);

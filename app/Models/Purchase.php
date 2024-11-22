@@ -49,7 +49,7 @@ class Purchase extends Model
 
     public function items(): HasMany
     {
-        return $this->hasMany(StockMovement::class, 'purchase_id');
+        return $this->hasMany(PurchaseItem::class);
     }
 
     public function payables(): HasMany

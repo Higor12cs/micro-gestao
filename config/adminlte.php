@@ -329,8 +329,7 @@ return [
         ['header' => 'Vendas'],
         [
             'text' => 'Pedidos',
-            'url' => '#',
-            'label' => 'Em Breve',
+            'route' => 'orders.index',
             'icon' => 'nav-icon fas fa-shopping-basket',
         ],
         [

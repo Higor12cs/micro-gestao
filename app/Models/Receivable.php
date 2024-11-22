@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Payable extends Model
+class Receivable extends Model
 {
     use HasFactory, HasSequentialFieldTrait, HasUlids;
 
     protected $fillable = [
         'tenant_id',
         'sequential',
-        'supplier_id',
-        'purchase_id',
+        'customer_id',
+        'order_id',
         'due_date',
         'amount',
         'paid_amount',
@@ -37,13 +37,13 @@ class Payable extends Model
         return $this->belongsTo(Tenant::class);
     }
 
-    public function purchase()
+    public function order()
     {
-        return $this->belongsTo(Purchase::class);
+        return $this->belongsTo(Order::class);
     }
 
-    public function supplier()
+    public function customer()
     {
-        return $this->belongsTo(Supplier::class);
+        return $this->belongsTo(Customer::class);
     }
 }
