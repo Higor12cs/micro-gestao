@@ -65,7 +65,11 @@
                     </tfoot>
                 </table>
             </div>
+
             <h5 id="total-display" class="mt-3">Total: R$ 0,00</h5>
+
+            <a href="{{ route('purchases.payables', $purchase->sequential) }}" class="btn btn-primary mt-3">Contas a
+                Pagar</a>
         </div>
     </div>
 @stop
@@ -91,15 +95,17 @@
                     let total = 0;
 
                     data.forEach(item => {
-                        const itemTotal = item.quantity * item.unit_price;
-                        total += itemTotal;
+                        const quantity = parseFloat(item.quantity);
+                        const unitPrice = parseFloat(item.unit_price);
+                        const totalPrice = parseFloat(item.quantity) * unitPrice;
+                        total += totalPrice;
 
                         html += `
                             <tr data-id="${item.id}">
                                 <td>${item.product.name}</td>
-                                <td>${item.quantity}</td>
-                                <td>R$ ${item.unit_price}</td>
-                                <td>R$ ${itemTotal}</td>
+                                <td>${quantity.toFixed(2)}</td>
+                                <td>R$ ${unitPrice.toFixed(2)}</td>
+                                <td>R$ ${totalPrice.toFixed(2)}</td>
                                 <td>
                                     <button class="btn btn-sm btn-danger delete-item">Excluir</button>
                                 </td>
