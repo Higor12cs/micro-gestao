@@ -33,6 +33,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/compras/{purchase:sequential}/pagaveis', [PurchaseController::class, 'purchasePayables'])->name('purchases.payables');
     Route::post('/compras/{purchase:sequential}/pagaveis', [PurchaseController::class, 'storePayables'])->name('purchases.store-payables');
 
+    Route::get('/purchases/{purchase}/items', [PurchaseController::class, 'items']);
+    Route::post('/purchases/{purchase}/items', [PurchaseController::class, 'addItem']);
+    Route::delete('/purchases/{purchase}/items/{item}', [PurchaseController::class, 'deleteItem']);
+
     Route::view('/secoes', 'sections.index')->name('sections.index');
     Route::view('/grupos', 'groups.index')->name('groups.index');
     Route::view('/marcas', 'brands.index')->name('brands.index');

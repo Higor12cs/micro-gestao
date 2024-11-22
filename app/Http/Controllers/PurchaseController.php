@@ -24,7 +24,7 @@ class PurchaseController extends Controller
                 return $purchase->date->format('d/m/Y');
             })
             ->editColumn('total', function ($purchase) {
-                return 'R$ ' . number_format($purchase->total, 2, ',', '.');
+                return 'R$ '.number_format($purchase->total, 2, ',', '.');
             })
             ->addColumn('supplier', function ($purchase) {
                 return $purchase->supplier->legal_name ?? $purchase->supplier->first_name;
@@ -40,7 +40,7 @@ class PurchaseController extends Controller
                     'entity' => 'purchases',
                     'modal' => false,
                     'sequential' => $purchase->sequential,
-                    'edit' => !$purchase->hasPayables(),
+                    'edit' => ! $purchase->hasPayables(),
                 ]);
             })
             ->make(true);
@@ -146,5 +146,44 @@ class PurchaseController extends Controller
         $purchase->payables()->createMany($payables);
 
         return to_route('purchases.index');
+    }
+
+    public function items(Purchase $purchase)
+    {
+        $items = $purchase->items()->with('product')->get();
+
+        return response()->json($items);
+    }
+
+    public function addItem(Request $request, Purchase $purchase)
+    {
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|numeric|min:1',
+            'unit_price' => 'required|numeric|min:0.01',
+        ]);
+
+        $validated['total_price'] = $validated['quantity'] * $validated['unit_price'];
+        $validated['tenant_id'] = auth()->user()->tenant->id;
+        $validated['created_by'] = auth()->user()->id;
+
+        $purchase->items()->create($validated);
+
+        $purchase->update([
+            'total' => $purchase->items()->sum('total_price'),
+        ]);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function deleteItem(Purchase $purchase, $itemId)
+    {
+        $purchase->items()->findOrFail($itemId)->delete();
+
+        $purchase->update([
+            'total' => $purchase->items()->sum('total_price'),
+        ]);
+
+        return response()->json(['success' => true]);
     }
 }
