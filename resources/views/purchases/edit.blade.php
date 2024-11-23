@@ -68,8 +68,7 @@
 
             <h5 id="total-display" class="mt-3">Total: R$ 0,00</h5>
 
-            <a href="{{ route('purchases.payables.index', $purchase->sequential) }}" class="btn btn-primary mt-3">Contas a
-                Pagar</a>
+            <a href="{{ route('purchases.payables.index', $purchase->sequential) }}" class="btn btn-primary mt-3">Pagáveis</a>
         </div>
     </div>
 @stop
@@ -77,15 +76,16 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            $(document).on('select2:open', () => {
-                document.querySelector('.select2-search__field').focus();
-            });
+            const formatCurrency = (value) =>
+                new Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }).format(value);
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
+            const parseCurrency = (formattedValue) =>
+                parseFloat(formattedValue.replace(/[^0-9,-]+/g, '').replace(/\./g, '').replace(',', '.'));
 
             const purchaseId = "{{ $purchase->id }}";
 
@@ -94,73 +94,82 @@
                     let html = '';
                     let total = 0;
 
-                    data.forEach(item => {
-                        const quantity = parseFloat(item.quantity);
-                        const unitCost = parseFloat(item.unit_cost);
-                        const totalCost = parseFloat(item.total_cost);
-                        total += totalCost;
+                    data.forEach(({
+                        id,
+                        product,
+                        quantity,
+                        unit_cost,
+                        total_cost
+                    }) => {
+                        quantity = parseFloat(quantity);
+                        unit_cost = parseFloat(unit_cost);
+                        total_cost = parseFloat(total_cost);
+
+                        total += total_cost;
 
                         html += `
-                            <tr data-id="${item.id}">
-                                <td>${item.product.name}</td>
-                                <td>${quantity.toFixed(2)}</td>
-                                <td>R$ ${unitCost.toFixed(2)}</td>
-                                <td>R$ ${totalCost.toFixed(2)}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-danger delete-item">Excluir</button>
-                                </td>
-                            </tr>`;
+                        <tr data-id="${id}">
+                            <td>${product.name}</td>
+                            <td>${quantity.toFixed(2)}</td>
+                            <td>${formatCurrency(unit_cost)}</td>
+                            <td>${formatCurrency(total_cost)}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger delete-item">Excluir</button>
+                            </td>
+                        </tr>`;
                     });
 
                     $('#items-table-body').html(html);
-                    $('#total-display').text(`Total: R$ ${total}`);
+                    $('#total-display').text(`Total: ${formatCurrency(total)}`);
                 });
             };
 
-            $('#new-product-select').select2({
-                theme: 'bootstrap4',
-                ajax: {
-                    url: '/ajax/products/search',
-                    dataType: 'json',
-                    delay: 250,
-                    processResults: (data) => ({
-                        results: data.map(product => ({
-                            id: product.id,
-                            text: `${product.text}`,
-                        })),
-                    }),
-                },
-                placeholder: 'Selecione um produto',
-                language: {
-                    searching: function() {
-                        return "Pesquisando";
+            const initializeSelect2 = () => {
+                $('#new-product-select').select2({
+                    theme: 'bootstrap4',
+                    ajax: {
+                        url: '/ajax/products/search',
+                        dataType: 'json',
+                        delay: 250,
+                        processResults: (data) => ({
+                            results: data.map(product => ({
+                                id: product.id,
+                                text: product.text
+                            }))
+                        })
                     },
-                    noResults: function() {
-                        return "Nenhum resultado encontrado.";
-                    },
-                },
-            }).on('select2:select', function(e) {
-                const productId = e.params.data.id;
-                const productName = e.params.data.text;
-
-                $.get(`/ajax/products/${productId}`, function(product) {
-                    $('#new-unit_cost').val(parseFloat(product.cost_price).toFixed(2));
-                    updatetotalCost();
+                    placeholder: 'Selecione um produto',
+                    language: {
+                        searching: () => "Pesquisando",
+                        noResults: () => "Nenhum resultado encontrado."
+                    }
+                }).on('select2:select', function(e) {
+                    const productId = e.params.data.id;
+                    $.get(`/ajax/products/${productId}`, function(product) {
+                        $('#new-unit_cost').val(formatCurrency(product.cost_price));
+                        updateTotalCost();
+                    });
                 });
-            });
+            };
 
-            const updatetotalCost = () => {
+            const updateTotalCost = () => {
                 const quantity = $('#new-quantity').val();
-                const unitCost = $('#new-unit_cost').val();
+                const unitCost = parseCurrency($('#new-unit_cost').val());
                 const totalCost = (quantity * unitCost).toFixed(2);
-                $('#new-total-cost').val(totalCost);
+                $('#new-total-cost').val(formatCurrency(totalCost));
             };
-            $('#new-quantity').on('input', updatetotalCost);
 
-            $('#add-item-button').on('click', function() {
+            const resetForm = () => {
+                $('#new-product-select').val(null).trigger('change');
+                $('#new-quantity').val(1);
+                $('#new-unit_cost').val('');
+                $('#new-total-cost').val('');
+            };
+
+            const addItem = () => {
                 const productId = $('#new-product-select').val();
                 const quantity = $('#new-quantity').val();
-                const unitCost = $('#new-unit_cost').val();
+                const unitCost = parseCurrency($('#new-unit_cost').val());
 
                 if (!productId || !quantity || !unitCost) {
                     alert('Preencha todos os campos antes de adicionar.');
@@ -169,38 +178,46 @@
 
                 const formData = {
                     product_id: productId,
-                    quantity: quantity,
-                    unit_cost: unitCost,
+                    quantity,
+                    unit_cost: unitCost
                 };
 
-                $.post(`/compras/${purchaseId}/itens`, formData, function(response) {
+                $.post(`/compras/${purchaseId}/itens`, formData, function() {
                     fetchItems();
-                    $('#new-product-select').val(null).trigger('change');
-                    $('#new-quantity').val(1);
-                    $('#new-unit_cost').val('');
-                    $('#new-total-cost').val('');
-                }).fail(function(xhr) {
-                    console.log(xhr);
+                    resetForm();
+                }).fail(function() {
                     alert('Erro ao adicionar o item. Tente novamente.');
                 });
+            };
 
+            const deleteItem = (itemId) => {
+                $.ajax({
+                    url: `/compras/${purchaseId}/itens/${itemId}`,
+                    type: 'DELETE',
+                    success: fetchItems,
+                    error: () => alert('Erro ao excluir o item.')
+                });
+            };
+
+            $(document).on('select2:open', () => {
+                document.querySelector('.select2-search__field').focus();
             });
 
             $(document).on('click', '.delete-item', function() {
                 const itemId = $(this).closest('tr').data('id');
-
-                $.ajax({
-                    url: `/compras/${purchaseId}/itens/${itemId}`,
-                    type: 'DELETE',
-                    success: function() {
-                        fetchItems();
-                    },
-                    error: function() {
-                        alert('Erro ao excluir o item.');
-                    }
-                });
+                deleteItem(itemId);
             });
 
+            $('#add-item-button').on('click', addItem);
+            $('#new-quantity').on('input', updateTotalCost);
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            initializeSelect2();
             fetchItems();
         });
     </script>

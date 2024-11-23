@@ -18,6 +18,13 @@ class PurchasePayablesController extends Controller
     {
         $purchase = $this->getPurchaseBySequential($sequential);
 
+        $request->merge([
+            'payables' => collect($request->input('payables'))->map(function ($payable) {
+                $payable['amount'] = (float) str_replace(['.', ','], ['', '.'], $payable['amount']);
+                return $payable;
+            })->toArray()
+        ]);
+
         $request->validate([
             'payables.*.due_date' => 'required|date|after_or_equal:today',
             'payables.*.amount' => 'required|numeric|min:0.01',
@@ -29,10 +36,10 @@ class PurchasePayablesController extends Controller
             'created_by' => auth()->id(),
         ]));
 
-        $totalAmount = collect($request->input('payables'))->sum('amount');
+        $totalAmount = $payables->sum('amount');
 
         if ($totalAmount != $purchase->total) {
-            return back()->withInput()->withErrors(['O valor das parcelas deve ser o igual ao valor total da compra.']);
+            return back()->withErrors(['O valor das parcelas deve ser o igual ao valor total da compra.']);
         }
 
         $purchase->payables()->createMany($payables->toArray());

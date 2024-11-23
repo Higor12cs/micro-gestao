@@ -177,6 +177,8 @@
                         'allowMinus': false,
                         'prefix': 'R$ ',
                         'digits': 2,
+                        'groupSeparator': '.',
+                        'radixPoint': ',',
                     });
 
                     updateTotalSum();

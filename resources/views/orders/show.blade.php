@@ -56,7 +56,7 @@
                         @endforeach
                         <tr>
                             <td colspan="4">Total</td>
-                            <td class="text-right">R$ {{ number_format($order->total, 2, ',', '.') }}</td>
+                            <td class="text-right">R$ {{ number_format($order->total_price, 2, ',', '.') }}</td>
                         </tr>
                     </tbody>
                 </table>

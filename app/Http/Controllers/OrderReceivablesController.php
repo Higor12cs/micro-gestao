@@ -20,16 +20,21 @@ class OrderReceivablesController extends Controller
 
         $request->validate([
             'receivables.*.due_date' => 'required|date|after_or_equal:today',
-            'receivables.*.amount' => 'required|numeric|min:0.01',
+            'receivables.*.amount' => 'required|string',
         ]);
 
-        $totalAmount = collect($request->input('receivables'))->sum('amount');
+        $receivables = collect($request->input('receivables'))->map(function ($receivable) {
+            $receivable['amount'] = (float) str_replace(['.', ','], ['', '.'], preg_replace('/[^\d,.-]/', '', $receivable['amount']));
+            return $receivable;
+        });
+
+        $totalAmount = $receivables->sum('amount');
 
         if ($totalAmount != $order->total_price) {
-            return back()->withInput()->withErrors(['O valor das parcelas deve ser o igual ao valor total do pedido.']);
+            return back()->withErrors(['O valor das parcelas deve ser o igual ao valor total do pedido.']);
         }
 
-        $receivables = collect($request->input('receivables'))->map(fn ($receivable) => array_merge($receivable, [
+        $receivables = $receivables->map(fn ($receivable) => array_merge($receivable, [
             'tenant_id' => $order->tenant_id,
             'customer_id' => $order->customer_id,
             'created_by' => auth()->id(),

@@ -82,10 +82,12 @@
                         @endif
                     </tbody>
                 </table>
-                
-                @error('payables')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
+
+                @foreach ($errors->all() as $error)
+                    <div class="alert alert-danger">
+                        {{ $error }}
+                    </div>
+                @endforeach
 
                 <div class="d-flex justify-content-between mt-3">
                     <button type="submit" id="store-payables" class="btn btn-primary" disabled>Salvar Pagáveis</button>
@@ -174,6 +176,8 @@
                         'allowMinus': false,
                         'prefix': 'R$ ',
                         'digits': 2,
+                        'groupSeparator': '.',
+                        'radixPoint': ',',
                     });
 
                     updateTotalSum();
