@@ -179,18 +179,17 @@
                     $('#new-quantity').val(1);
                     $('#new-unit_price').val('');
                     $('#new-total-cost').val('');
-                }).fail(function(xhr) {
-                    console.log(xhr);
+                }).fail(function() {
                     alert('Erro ao adicionar o item. Tente novamente.');
                 });
 
             });
 
             $(document).on('click', '.delete-item', function() {
-                const itemId = $(this).closest('tr').data('id');
+                const orderItemId = $(this).closest('tr').data('id');
 
                 $.ajax({
-                    url: `/pedidos/${orderId}/itens/${itemId}`,
+                    url: `/pedidos/${orderId}/itens/${orderItemId}`,
                     type: 'DELETE',
                     success: function() {
                         fetchItems();

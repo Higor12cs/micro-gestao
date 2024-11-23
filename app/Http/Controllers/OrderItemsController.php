@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderItemAdded;
+use App\Events\OrderItemRemoved;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
 use App\Traits\TenantAuthorization;
 use Illuminate\Http\Request;
@@ -40,22 +43,23 @@ class OrderItemsController extends Controller
             'created_by' => auth()->id(),
         ]));
 
-        $this->updateOrderTotal($order);
+        $this->recalculateOrderTotal($order);
 
         return response()->json(['success' => true]);
     }
 
-    public function destroy(Order $order, $itemId)
+    public function destroy(Order $order, OrderItem $orderItem)
     {
-        $this->authorizeTenantAccess($order);
+        $this->authorizeTenantAccess($orderItem->order);
 
-        $order->items()->findOrFail($itemId)->delete();
-        $this->updateOrderTotal($order);
+        $orderItem->delete();
+
+        $this->recalculateOrderTotal($order);
 
         return response()->json(['success' => true]);
     }
 
-    private function updateOrderTotal(Order $order)
+    private function recalculateOrderTotal(Order $order)
     {
         $order->update(['total_price' => $order->items()->sum('total_price')]);
     }

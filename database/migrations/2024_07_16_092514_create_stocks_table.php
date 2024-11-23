@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignUlid('product_id')->constrained();
             $table->decimal('stock_total', 10, 2)->default(0);
             $table->decimal('stock_on_trial', 10, 2)->default(0);
-            $table->decimal('stock_available', 10, 2)->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

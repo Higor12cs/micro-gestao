@@ -4,13 +4,13 @@ namespace App\Models;
 
 use App\Traits\HasSequentialFieldTrait;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    use HasFactory, HasUlids, HasSequentialFieldTrait;
+    use HasFactory, HasSequentialFieldTrait, HasUlids, SoftDeletes;
 
     protected $fillable = [
         'tenant_id',
@@ -27,10 +27,10 @@ class Order extends Model
 
     protected $casts = [
         'date' => 'date',
-        'total_cost' => 'decimal:2',
-        'discount' => 'decimal:2',
-        'freight' => 'decimal:2',
-        'total_price' => 'decimal:2',
+        'total_cost' => 'float',
+        'discount' => 'float',
+        'freight' => 'float',
+        'total_price' => 'float',
     ];
 
     public function tenant()

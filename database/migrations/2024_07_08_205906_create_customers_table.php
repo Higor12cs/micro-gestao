@@ -35,6 +35,7 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->foreignUlid('created_by')->constrained('users');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

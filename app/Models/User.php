@@ -8,12 +8,13 @@ use App\Traits\HasSequentialFieldTrait;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, HasSequentialFieldTrait, HasUlids, Notifiable;
+    use HasFactory, HasSequentialFieldTrait, HasUlids, Notifiable, SoftDeletes;
 
     protected $fillable = [
         'tenant_id',

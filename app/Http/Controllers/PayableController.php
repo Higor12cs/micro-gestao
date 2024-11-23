@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PayableRequest;
 use App\Models\Payable;
 use App\Traits\TenantAuthorization;
-use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class PayableController extends Controller
@@ -25,12 +24,12 @@ class PayableController extends Controller
                 ->select('payables.*');
 
             return DataTables::of($query)
-                ->editColumn('sequential', fn($payable) => str_pad($payable->sequential, 5, '0', STR_PAD_LEFT))
-                ->addColumn('supplier', fn($payable) => $payable->supplier->legal_name ?? $payable->supplier->first_name)
-                ->editColumn('due_date', fn($payable) => $payable->due_date->format('d/m/Y'))
-                ->addColumn('paid', fn($payable) => view('partials.bool', ['bool' => $payable->paid]))
-                ->editColumn('amount', fn($payable) => number_format($payable->amount, 2, '.', ','))
-                ->addColumn('actions', fn($payable) => view('partials.actions', [
+                ->editColumn('sequential', fn ($payable) => str_pad($payable->sequential, 5, '0', STR_PAD_LEFT))
+                ->addColumn('supplier', fn ($payable) => $payable->supplier->legal_name ?? $payable->supplier->first_name)
+                ->editColumn('due_date', fn ($payable) => $payable->due_date->format('d/m/Y'))
+                ->addColumn('paid', fn ($payable) => view('partials.bool', ['bool' => $payable->paid]))
+                ->editColumn('amount', fn ($payable) => number_format($payable->amount, 2, '.', ','))
+                ->addColumn('actions', fn ($payable) => view('partials.actions', [
                     'id' => $payable->id,
                     'entity' => 'payables',
                     'modal' => true,

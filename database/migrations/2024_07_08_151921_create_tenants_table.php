@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('trial_ends_at')->nullable();
             $table->date('subscription_ends_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

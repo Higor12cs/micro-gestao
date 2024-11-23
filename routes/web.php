@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/pedidos/{sequential}', [OrderController::class, 'destroy'])->name('orders.destroy');
     Route::get('/pedidos/{order}/itens', [OrderItemsController::class, 'index'])->name('orders.items.index');
     Route::post('/pedidos/{order}/itens', [OrderItemsController::class, 'store'])->name('orders.items.store');
-    Route::delete('/pedidos/{order}/itens/{item}', [OrderItemsController::class, 'destroy'])->name('orders.items.destroy');
+    Route::delete('/pedidos/{order}/itens/{orderItem}', [OrderItemsController::class, 'destroy'])->name('orders.items.destroy');
     Route::get('/pedidos/{order:sequential}/recebiveis', [OrderReceivablesController::class, 'index'])->name('orders.receivables.index');
     Route::post('/pedidos/{order:sequential}/recebiveis', [OrderReceivablesController::class, 'store'])->name('orders.receivables.store');
 
@@ -54,7 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/compras/{sequential}', [PurchaseController::class, 'destroy'])->name('purchases.destroy');
     Route::get('/compras/{purchase}/itens', [PurchaseItemsController::class, 'index'])->name('purchases.items.index');
     Route::post('/compras/{purchase}/itens', [PurchaseItemsController::class, 'store'])->name('purchases.items.store');
-    Route::delete('/compras/{purchase}/itens/{item}', [PurchaseItemsController::class, 'destroy'])->name('purchases.items.destroy');
+    Route::delete('/compras/{purchase}/itens/{purchaseItem}', [PurchaseItemsController::class, 'destroy'])->name('purchases.items.destroy');
     Route::get('/compras/{purchase:sequential}/pagaveis', [PurchasePayablesController::class, 'index'])->name('purchases.payables.index');
     Route::post('/compras/{purchase:sequential}/pagaveis', [PurchasePayablesController::class, 'store'])->name('purchases.payables.store');
 

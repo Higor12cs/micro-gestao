@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('active')->default(true);
             $table->foreignUlid('created_by')->constrained('users');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

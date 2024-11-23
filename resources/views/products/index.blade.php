@@ -159,8 +159,8 @@
                         name: 'name',
                     },
                     {
-                        data: 'stocks[, ].stock_available',
-                        name: 'stock_available',
+                        data: 'stock_total',
+                        name: 'stock_total',
                     },
                     {
                         data: 'active',

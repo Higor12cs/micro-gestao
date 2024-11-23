@@ -82,13 +82,16 @@
                         @endif
                     </tbody>
                 </table>
-                
-                @error('receivables')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
+
+                @foreach ($errors->all() as $error)
+                    <div class="alert alert-danger">
+                        {{ $error }}
+                    </div>
+                @endforeach
 
                 <div class="d-flex justify-content-between mt-3">
-                    <button type="submit" id="store-receivables" class="btn btn-primary" disabled>Salvar Recebíveis</button>
+                    <button type="submit" id="store-receivables" class="btn btn-primary" disabled>Salvar
+                        Recebíveis</button>
                     <h5 class="mt-auto">Total das Parcelas: <span id="total-sum">R$ 0,00</span></h5>
                 </div>
             </form>

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignUlid('tenant_id')->constrained();
             $table->foreignUlid('product_id')->constrained();
             $table->foreignUlid('order_item_id')->nullable()->constrained();
-            $table->foreignUlid('trial_item_id')->nullable()->constrained();
+            $table->foreignUlid('trial_item_id')->nullable();
             $table->foreignUlid('purchase_item_id')->nullable()->constrained();
             $table->decimal('quantity', 10, 2)->default(0);
             $table->decimal('unit_cost', 10, 2)->default(0);
@@ -27,6 +27,7 @@ return new class extends Migration
             $table->text('observation')->nullable();
             $table->foreignUlid('created_by')->constrained('users');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

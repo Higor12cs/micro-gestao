@@ -25,6 +25,7 @@ return new class extends Migration
             $table->enum('status', ['pending', 'paid'])->default('pending');
             $table->foreignUlid('created_by')->constrained('users');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

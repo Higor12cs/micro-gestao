@@ -27,7 +27,7 @@ class GroupController extends Controller
             ->get(['id', 'name']);
 
         return response()->json(
-            $groups->map(fn($group) => ['id' => $group->id, 'text' => $group->name])
+            $groups->map(fn ($group) => ['id' => $group->id, 'text' => $group->name])
         );
     }
 
@@ -37,12 +37,12 @@ class GroupController extends Controller
             $query = Group::where('tenant_id', auth()->user()->tenant->id);
 
             return DataTables::of($query)
-                ->editColumn('sequential', fn($group) => str_pad($group->sequential, 5, '0', STR_PAD_LEFT))
-                ->editColumn('active', fn($group) => view('partials.active', ['active' => $group->active]))
-                ->addColumn('actions', fn($group) => view('partials.actions', [
+                ->editColumn('sequential', fn ($group) => str_pad($group->sequential, 5, '0', STR_PAD_LEFT))
+                ->editColumn('active', fn ($group) => view('partials.active', ['active' => $group->active]))
+                ->addColumn('actions', fn ($group) => view('partials.actions', [
                     'id' => $group->id,
                     'sequential' => $group->sequential,
-                    'entity' => 'groups'
+                    'entity' => 'groups',
                 ]))
                 ->make(true);
         }

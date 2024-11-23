@@ -22,7 +22,7 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
-        $products = Product::with('stocks')
+        $products = Product::with('stock')
             ->where('tenant_id', auth()->user()->tenant->id)
             ->where('name', 'like', "%{$request->input('search')}%")
             ->limit(10)
@@ -35,12 +35,13 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Product::with('stocks')
+            $query = Product::with('stock')
                 ->where('tenant_id', auth()->user()->tenant->id)
                 ->select('products.*');
 
             return DataTables::of($query)
                 ->editColumn('sequential', fn ($product) => str_pad($product->sequential, 5, '0', STR_PAD_LEFT))
+                ->addColumn('stock_total', fn ($product) => $product->stock ? $product->stock->stock_total : 0)
                 ->editColumn('active', fn ($product) => view('partials.active', ['active' => $product->active]))
                 ->addColumn('actions', fn ($product) => view('partials.actions', [
                     'id' => $product->id,

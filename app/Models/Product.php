@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory, HasSequentialFieldTrait, HasUlids;
+    use HasFactory, HasSequentialFieldTrait, HasUlids, SoftDeletes;
 
     protected $fillable = [
         'tenant_id',
@@ -35,9 +36,8 @@ class Product extends Model
     protected static function booted(): void
     {
         static::created(function (Product $product) {
-            $product->stocks()->create([
+            $product->stock()->create([
                 'tenant_id' => $product->tenant_id,
-                'stock_total' => 0,
             ]);
         });
     }
@@ -67,8 +67,8 @@ class Product extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function stocks(): HasMany
+    public function stock(): HasOne
     {
-        return $this->hasMany(Stock::class);
+        return $this->hasOne(Stock::class);
     }
 }

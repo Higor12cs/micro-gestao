@@ -31,21 +31,21 @@ class CustomerController extends Controller
             ->get(['id', 'first_name']);
 
         return response()->json(
-            $customers->map(fn($customer) => ['id' => $customer->id, 'text' => $customer->first_name])
+            $customers->map(fn ($customer) => ['id' => $customer->id, 'text' => $customer->first_name])
         );
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        if (request()->ajax()) {
+        if ($request->ajax()) {
             $query = Customer::where('tenant_id', auth()->user()->tenant->id);
 
             return DataTables::of($query)
-                ->editColumn('sequential', fn($customer) => str_pad($customer->sequential, 5, '0', STR_PAD_LEFT))
-                ->addColumn('actions', fn($customer) => view('partials.actions', [
+                ->editColumn('sequential', fn ($customer) => str_pad($customer->sequential, 5, '0', STR_PAD_LEFT))
+                ->addColumn('actions', fn ($customer) => view('partials.actions', [
                     'id' => $customer->id,
                     'sequential' => $customer->sequential,
-                    'entity' => 'customers'
+                    'entity' => 'customers',
                 ]))
                 ->make(true);
         }

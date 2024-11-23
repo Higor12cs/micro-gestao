@@ -23,7 +23,7 @@ class SectionController extends Controller
             ->where('name', 'like', "%{$request->input('search')}%")
             ->limit(10)
             ->get()
-            ->map(fn($section) => ['id' => $section->id, 'text' => $section->name]);
+            ->map(fn ($section) => ['id' => $section->id, 'text' => $section->name]);
 
         return response()->json($sections);
     }
@@ -34,9 +34,9 @@ class SectionController extends Controller
             $query = Section::where('tenant_id', auth()->user()->tenant->id);
 
             return DataTables::of($query)
-                ->editColumn('sequential', fn($section) => str_pad($section->sequential, 5, '0', STR_PAD_LEFT))
-                ->editColumn('active', fn($section) => view('partials.active', ['active' => $section->active]))
-                ->addColumn('actions', fn($section) => view('partials.actions', [
+                ->editColumn('sequential', fn ($section) => str_pad($section->sequential, 5, '0', STR_PAD_LEFT))
+                ->editColumn('active', fn ($section) => view('partials.active', ['active' => $section->active]))
+                ->addColumn('actions', fn ($section) => view('partials.actions', [
                     'id' => $section->id,
                     'sequential' => $section->sequential,
                     'entity' => 'sections',

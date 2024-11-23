@@ -23,6 +23,7 @@ return new class extends Migration
             $table->decimal('total_cost', 10, 2)->default(0);
             $table->foreignUlid('created_by')->constrained('users');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

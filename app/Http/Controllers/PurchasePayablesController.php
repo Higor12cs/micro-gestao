@@ -31,10 +31,8 @@ class PurchasePayablesController extends Controller
 
         $totalAmount = collect($request->input('payables'))->sum('amount');
 
-        if ($totalAmount != $order->total_amount) {
-            return back()
-                ->withInput()
-                ->with('payables', 'O valor total das parcelas deve ser igual ao valor total da compra.');
+        if ($totalAmount != $purchase->total) {
+            return back()->withInput()->withErrors(['O valor das parcelas deve ser o igual ao valor total da compra.']);
         }
 
         $purchase->payables()->createMany($payables->toArray());

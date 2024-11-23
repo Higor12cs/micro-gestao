@@ -27,7 +27,7 @@ class SupplierController extends Controller
             })
             ->limit(10)
             ->get()
-            ->map(fn($supplier) => [
+            ->map(fn ($supplier) => [
                 'id' => $supplier->id,
                 'text' => $supplier->first_name,
             ]);
@@ -41,8 +41,8 @@ class SupplierController extends Controller
             $query = Supplier::where('tenant_id', auth()->user()->tenant->id);
 
             return DataTables::of($query)
-                ->editColumn('sequential', fn($supplier) => str_pad($supplier->sequential, 5, '0', STR_PAD_LEFT))
-                ->addColumn('actions', fn($supplier) => view('partials.actions', [
+                ->editColumn('sequential', fn ($supplier) => str_pad($supplier->sequential, 5, '0', STR_PAD_LEFT))
+                ->addColumn('actions', fn ($supplier) => view('partials.actions', [
                     'id' => $supplier->id,
                     'sequential' => $supplier->sequential,
                     'entity' => 'suppliers',
