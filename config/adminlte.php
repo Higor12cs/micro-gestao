@@ -370,8 +370,7 @@ return [
                 ],
                 [
                     'text' => 'Contas e Caixas',
-                    'url' => '#',
-                    'label' => 'Em Breve',
+                    'route' => 'accounts.index',
                     'icon' => 'nav-icon fas fa-university',
                 ],
             ],

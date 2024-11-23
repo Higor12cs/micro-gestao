@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ReceivableRequest;
 use App\Models\Receivable;
 use App\Traits\TenantAuthorization;
+use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class ReceivableController extends Controller
@@ -16,26 +17,10 @@ class ReceivableController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        if (request()->ajax()) {
-            $query = Receivable::with('customer')
-                ->where('tenant_id', auth()->user()->tenant->id)
-                ->select('receivables.*');
-
-            return DataTables::of($query)
-                ->editColumn('sequential', fn ($receivable) => str_pad($receivable->sequential, 5, '0', STR_PAD_LEFT))
-                ->addColumn('customer', fn ($receivable) => $receivable->customer->legal_name ?? $receivable->customer->first_name)
-                ->editColumn('due_date', fn ($receivable) => $receivable->due_date->format('d/m/Y'))
-                ->addColumn('paid', fn ($receivable) => view('partials.bool', ['bool' => $receivable->paid]))
-                ->editColumn('amount', fn ($receivable) => number_format($receivable->amount, 2, '.', ','))
-                ->addColumn('actions', fn ($receivable) => view('partials.actions', [
-                    'id' => $receivable->id,
-                    'entity' => 'receivables',
-                    'modal' => true,
-                    'sequential' => $receivable->sequential,
-                ]))
-                ->make(true);
+        if ($request->ajax()) {
+            return $this->getDataTable();
         }
 
         return view('receivables.index');
@@ -81,5 +66,26 @@ class ReceivableController extends Controller
         $receivable->delete();
 
         return response()->json(null, 204);
+    }
+
+    private function getDataTable()
+    {
+        $query = Receivable::with('customer')
+                ->where('tenant_id', auth()->user()->tenant->id)
+                ->select('receivables.*');
+
+            return DataTables::of($query)
+                ->editColumn('sequential', fn ($receivable) => str_pad($receivable->sequential, 5, '0', STR_PAD_LEFT))
+                ->addColumn('customer', fn ($receivable) => $receivable->customer->legal_name ?? $receivable->customer->first_name)
+                ->editColumn('due_date', fn ($receivable) => $receivable->due_date->format('d/m/Y'))
+                ->addColumn('paid', fn ($receivable) => view('partials.bool', ['bool' => $receivable->paid]))
+                ->editColumn('amount', fn ($receivable) => 'R$ ' . number_format($receivable->amount, 2, ',', '.'))
+                ->addColumn('actions', fn ($receivable) => view('partials.actions', [
+                    'id' => $receivable->id,
+                    'entity' => 'receivables',
+                    'modal' => true,
+                    'sequential' => $receivable->sequential,
+                ]))
+                ->make(true);
     }
 }

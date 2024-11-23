@@ -28,7 +28,7 @@ class PayableController extends Controller
                 ->addColumn('supplier', fn ($payable) => $payable->supplier->legal_name ?? $payable->supplier->first_name)
                 ->editColumn('due_date', fn ($payable) => $payable->due_date->format('d/m/Y'))
                 ->addColumn('paid', fn ($payable) => view('partials.bool', ['bool' => $payable->paid]))
-                ->editColumn('amount', fn ($payable) => number_format($payable->amount, 2, '.', ','))
+                ->editColumn('amount', fn ($payable) => number_format($payable->amount, 2, ',', '.'))
                 ->addColumn('actions', fn ($payable) => view('partials.actions', [
                     'id' => $payable->id,
                     'entity' => 'payables',

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\GroupController;
@@ -29,6 +30,8 @@ Route::middleware('auth')->group(function () {
 
     Route::view('/pagaveis', 'payables.index')->name('payables.index');
     Route::view('/recebiveis', 'receivables.index')->name('receivables.index');
+
+    Route::view('/contas', 'accounts.index')->name('accounts.index');
 
     Route::get('/produtos', [ProductController::class, 'index'])->name('products.index');
 
@@ -75,6 +78,7 @@ Route::middleware('auth')->group(function () {
 
         Route::apiResource('/customers', CustomerController::class);
         Route::apiResource('/suppliers', SupplierController::class);
+        Route::apiResource('/accounts', AccountController::class);
         Route::apiResource('/payables', PayableController::class);
         Route::apiResource('/receivables', ReceivableController::class);
         Route::apiResource('/products', ProductController::class);
