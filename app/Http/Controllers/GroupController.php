@@ -31,9 +31,9 @@ class GroupController extends Controller
         );
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        if (request()->ajax()) {
+        if ($request->ajax()) {
             $query = Group::where('tenant_id', auth()->user()->tenant->id);
 
             return DataTables::of($query)

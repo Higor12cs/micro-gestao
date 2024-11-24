@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\OrderItemAdded;
-use App\Events\OrderItemRemoved;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Traits\TenantAuthorization;
 use Illuminate\Http\Request;
 
-class OrderItemsController extends Controller
+class OrderItemController extends Controller
 {
     use TenantAuthorization;
 

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
-class OrderReceivablesController extends Controller
+class OrderReceivableController extends Controller
 {
     public function index(string $sequential)
     {
@@ -25,6 +25,7 @@ class OrderReceivablesController extends Controller
 
         $receivables = collect($request->input('receivables'))->map(function ($receivable) {
             $receivable['amount'] = (float) str_replace(['.', ','], ['', '.'], preg_replace('/[^\d,.-]/', '', $receivable['amount']));
+
             return $receivable;
         });
 

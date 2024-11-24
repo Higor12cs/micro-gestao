@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 
-class PurchasePayablesController extends Controller
+class PurchasePayableController extends Controller
 {
     public function index(string $sequential)
     {
@@ -21,8 +21,9 @@ class PurchasePayablesController extends Controller
         $request->merge([
             'payables' => collect($request->input('payables'))->map(function ($payable) {
                 $payable['amount'] = (float) str_replace(['.', ','], ['', '.'], $payable['amount']);
+
                 return $payable;
-            })->toArray()
+            })->toArray(),
         ]);
 
         $request->validate([

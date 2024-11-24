@@ -6,7 +6,7 @@ use App\Models\Purchase;
 use App\Traits\TenantAuthorization;
 use Illuminate\Http\Request;
 
-class PurchaseItemsController extends Controller
+class PurchaseItemController extends Controller
 {
     use TenantAuthorization;
 

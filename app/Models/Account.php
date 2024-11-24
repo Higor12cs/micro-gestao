@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Account extends Model
 {
-    use SoftDeletes, HasFactory, HasUlids, HasSequentialFieldTrait;
+    use HasFactory, HasSequentialFieldTrait, HasUlids, SoftDeletes;
 
     protected $fillable = [
         'tenant_id',

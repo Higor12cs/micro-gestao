@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PayableRequest;
 use App\Models\Payable;
 use App\Traits\TenantAuthorization;
+use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class PayableController extends Controller
@@ -16,9 +17,9 @@ class PayableController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        if (request()->ajax()) {
+        if ($request->ajax()) {
             $query = Payable::with('supplier')
                 ->where('tenant_id', auth()->user()->tenant->id)
                 ->select('payables.*');
