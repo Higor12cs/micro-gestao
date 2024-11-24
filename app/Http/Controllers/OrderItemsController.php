@@ -61,6 +61,9 @@ class OrderItemsController extends Controller
 
     private function recalculateOrderTotal(Order $order)
     {
-        $order->update(['total_price' => $order->items()->sum('total_price')]);
+        $order->update([
+            'total_price' => $order->items()->sum('total_price'),
+            'total_cost' => $order->items()->sum('total_cost'),
+        ]);
     }
 }

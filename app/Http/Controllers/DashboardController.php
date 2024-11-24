@@ -14,20 +14,22 @@ class DashboardController extends Controller
 
         $salesData = Order::where('date', '>=', $thirtyDaysAgo)
             ->selectRaw('
-                SUM(total_price) as total_revenue,
-                (SUM(total_price - total_cost - discount - freight) / SUM(total_price)) * 100 as contribution_margin_percentage,
+                SUM(total_price) as total_price,
+                SUM(total_cost) as total_cost,
                 COUNT(*) as order_count,
                 AVG(total_price) as average_ticket
             ')
             ->first();
 
-        $totalRevenue = $salesData->total_revenue;
-        $contributionMarginPercentage = $salesData->contribution_margin_percentage;
+        $total_price = $salesData->total_price;
+        $contributionMarginPercentage = $total_price > 0
+            ? $salesData->total_cost / $total_price * 100
+            : 0;
         $orderCount = $salesData->order_count;
         $averageTicket = $salesData->average_ticket;
 
         return view('dashboard.index', [
-            'totalRevenue' => $totalRevenue,
+            'total_price' => $total_price,
             'contributionMarginPercentage' => $contributionMarginPercentage,
             'orderCount' => $orderCount,
             'averageTicket' => $averageTicket,

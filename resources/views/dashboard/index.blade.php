@@ -21,7 +21,7 @@
         <div class="col-lg-3 col-6">
             <div class="small-box bg-info">
                 <div class="inner">
-                    <h3>{{ number_format($totalRevenue, 2, '.', ',') }}</h3>
+                    <h3>{{ number_format($total_price, 2, ',', '.') }}</h3>
                     <p>Faturamento</p>
                 </div>
                 <div class="icon">
@@ -32,9 +32,10 @@
         </div>
 
         <div class="col-lg-3 col-6">
-            <div class="small-box bg-success">
+            <div class="small-box bg-info">
                 <div class="inner">
-                    <h3>{{ number_format($contributionMarginPercentage, 0, ',', '.') }}<sup style="font-size: 20px">%</sup></h3>
+                    <h3>{{ number_format($contributionMarginPercentage, 0, ',', '.') }}<sup style="font-size: 20px">%</sup>
+                    </h3>
                     <p>Margem</p>
                 </div>
                 <div class="icon">
@@ -45,7 +46,7 @@
         </div>
 
         <div class="col-lg-3 col-6">
-            <div class="small-box bg-warning">
+            <div class="small-box bg-info">
                 <div class="inner">
                     <h3>{{ $orderCount }}</h3>
                     <p>Quant. Pedidos</p>
@@ -58,9 +59,9 @@
         </div>
 
         <div class="col-lg-3 col-6">
-            <div class="small-box bg-danger">
+            <div class="small-box bg-info">
                 <div class="inner">
-                    <h3>{{ $averageTicket }}</h3>
+                    <h3>{{ number_format($averageTicket, 2, ',', '.') }}</h3>
                     <p>Ticket Médio</p>
                 </div>
                 <div class="icon">
