@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderItemsController;
@@ -23,7 +24,7 @@ Auth::routes();
 
 Route::middleware('auth')->group(function () {
     Route::view('/home', 'home.index')->name('home.index');
-    Route::view('/dashboard', 'dashboard.index')->name('dashboard.index');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
     Route::view('/clientes', 'customers.index')->name('customers.index');
     Route::view('/fornecedores', 'suppliers.index')->name('suppliers.index');
