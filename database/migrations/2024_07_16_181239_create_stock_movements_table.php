@@ -23,7 +23,7 @@ return new class extends Migration
             $table->decimal('total_cost', 10, 2)->default(0);
             $table->decimal('unit_price', 10, 2)->default(0);
             $table->decimal('total_price', 10, 2)->default(0);
-            $table->enum('type', ['order', 'trial', 'purchase', 'adjustment', 'initial']);
+            $table->string('type');
             $table->text('observation')->nullable();
             $table->foreignUlid('created_by')->constrained('users');
             $table->timestamps();

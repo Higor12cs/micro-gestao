@@ -28,4 +28,17 @@ class Stock extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function updateStock(float $quantity, string $type, array $movementData): void
+    {
+        $this->stock_total += $quantity;
+        $this->save();
+
+        StockMovement::create(array_merge($movementData, [
+            'tenant_id' => $this->tenant_id,
+            'product_id' => $this->product_id,
+            'quantity' => abs($quantity),
+            'type' => $type,
+        ]));
+    }
 }
