@@ -32,7 +32,6 @@ class PurchasePayableController extends Controller
         ]);
 
         $payables = collect($request->input('payables'))->map(fn ($payable) => array_merge($payable, [
-            'tenant_id' => $purchase->tenant_id,
             'supplier_id' => $purchase->supplier_id,
             'created_by' => auth()->id(),
         ]));
@@ -52,7 +51,6 @@ class PurchasePayableController extends Controller
     private function getPurchaseBySequential(string $sequential): Purchase
     {
         return Purchase::query()
-            ->where('tenant_id', auth()->user()->tenant->id)
             ->where('sequential', $sequential)
             ->firstOrFail();
     }

@@ -21,7 +21,7 @@ class BrandController extends Controller
     {
         $searchTerm = $request->input('search', '');
 
-        $brands = Brand::where('tenant_id', auth()->user()->tenant->id)
+        $brands = Brand::query()
             ->where('name', 'like', "%{$searchTerm}%")
             ->limit(10)
             ->get(['id', 'name']);
@@ -34,7 +34,7 @@ class BrandController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Brand::where('tenant_id', auth()->user()->tenant->id);
+            $query = Brand::query();
 
             return DataTables::of($query)
                 ->editColumn('sequential', fn ($brand) => str_pad($brand->sequential, 5, '0', STR_PAD_LEFT))
@@ -53,7 +53,6 @@ class BrandController extends Controller
     public function store(BrandRequest $request)
     {
         $data = $request->validated();
-        $data['tenant_id'] = auth()->user()->tenant->id;
         $data['active'] = $request->boolean('active');
 
         $brand = Brand::create($data);

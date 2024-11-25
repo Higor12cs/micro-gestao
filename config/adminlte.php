@@ -452,7 +452,7 @@ return [
         [
             'text' => 'Vendedores',
             'url' => '#',
-            'label' => 'Em Breve', 
+            'label' => 'Em Breve',
             'icon' => 'nav-icon fas fa-users',
         ],
         [

@@ -21,7 +21,7 @@ class AccountController extends Controller
     {
         $searchTerm = $request->input('search', '');
 
-        $accounts = Account::where('tenant_id', auth()->user()->tenant->id)
+        $accounts = Account::query()
             ->where('name', 'like', "%{$searchTerm}%")
             ->limit(10)
             ->get(['id', 'name']);
@@ -34,7 +34,7 @@ class AccountController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Account::where('tenant_id', auth()->user()->tenant->id);
+            $query = Account::query();
 
             return DataTables::of($query)
                 ->editColumn('sequential', fn ($account) => str_pad($account->sequential, 5, '0', STR_PAD_LEFT))
@@ -53,7 +53,6 @@ class AccountController extends Controller
     public function store(AccountRequest $request)
     {
         $data = $request->validated();
-        $data['tenant_id'] = auth()->user()->tenant->id;
         $data['active'] = $request->boolean('active');
 
         $account = Account::create($data);

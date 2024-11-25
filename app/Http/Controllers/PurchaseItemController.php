@@ -31,7 +31,6 @@ class PurchaseItemController extends Controller
 
         $purchase->items()->create(array_merge($validated, [
             'total_cost' => $validated['quantity'] * $validated['unit_cost'],
-            'tenant_id' => auth()->user()->tenant->id,
             'created_by' => auth()->id(),
         ]));
 

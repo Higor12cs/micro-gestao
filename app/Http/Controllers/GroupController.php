@@ -21,7 +21,7 @@ class GroupController extends Controller
     {
         $searchTerm = $request->input('search', '');
 
-        $groups = Group::where('tenant_id', auth()->user()->tenant->id)
+        $groups = Group::query()
             ->where('name', 'like', "%{$searchTerm}%")
             ->limit(10)
             ->get(['id', 'name']);
@@ -34,7 +34,7 @@ class GroupController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Group::where('tenant_id', auth()->user()->tenant->id);
+            $query = Group::query();
 
             return DataTables::of($query)
                 ->editColumn('sequential', fn ($group) => str_pad($group->sequential, 5, '0', STR_PAD_LEFT))
@@ -53,7 +53,6 @@ class GroupController extends Controller
     public function store(GroupRequest $request)
     {
         $data = $request->validated();
-        $data['tenant_id'] = auth()->user()->tenant->id;
         $data['active'] = $request->boolean('active');
 
         $group = Group::create($data);

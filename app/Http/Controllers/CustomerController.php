@@ -21,7 +21,7 @@ class CustomerController extends Controller
     {
         $searchTerm = $request->input('search', '');
 
-        $customers = Customer::where('tenant_id', auth()->user()->tenant->id)
+        $customers = Customer::query()
             ->where(function ($query) use ($searchTerm) {
                 $query->where('first_name', 'like', "%{$searchTerm}%")
                     ->orWhere('last_name', 'like', "%{$searchTerm}%")
@@ -38,7 +38,7 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Customer::where('tenant_id', auth()->user()->tenant->id);
+            $query = Customer::query();
 
             return DataTables::of($query)
                 ->editColumn('sequential', fn ($customer) => str_pad($customer->sequential, 5, '0', STR_PAD_LEFT))
@@ -55,10 +55,7 @@ class CustomerController extends Controller
 
     public function store(CustomerRequest $request)
     {
-        $data = $request->validated();
-        $data['tenant_id'] = auth()->user()->tenant->id;
-
-        $customer = Customer::create($data);
+        $customer = Customer::create($request->validated());
 
         return response()->json($customer, 201);
     }

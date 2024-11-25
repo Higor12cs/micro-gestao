@@ -28,10 +28,7 @@ class ReceivableController extends Controller
 
     public function store(ReceivableRequest $request)
     {
-        $data = $request->validated();
-        $data['tenant_id'] = auth()->user()->tenant->id;
-
-        $receivable = Receivable::create($data);
+        $receivable = Receivable::create($request->validated());
 
         return to_route('receivables.edit', ['sequential' => $receivable->sequential]);
     }
@@ -71,7 +68,6 @@ class ReceivableController extends Controller
     private function getDataTable()
     {
         $query = Receivable::with('customer')
-            ->where('tenant_id', auth()->user()->tenant->id)
             ->select('receivables.*');
 
         return DataTables::of($query)

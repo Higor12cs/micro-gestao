@@ -36,7 +36,6 @@ class OrderReceivableController extends Controller
         }
 
         $receivables = $receivables->map(fn ($receivable) => array_merge($receivable, [
-            'tenant_id' => $order->tenant_id,
             'customer_id' => $order->customer_id,
             'created_by' => auth()->id(),
         ]));
@@ -50,7 +49,6 @@ class OrderReceivableController extends Controller
     private function getOrderBySequential(string $sequential): Order
     {
         return Order::query()
-            ->where('tenant_id', auth()->user()->tenant->id)
             ->where('sequential', $sequential)
             ->firstOrFail();
     }

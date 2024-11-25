@@ -12,7 +12,6 @@ class DashboardController extends Controller
         $thirtyDaysAgo = Carbon::now()->subDays(30);
 
         $salesData = Order::query()
-            ->where('tenant_id', auth()->user()->tenant_id)
             ->where('date', '>=', $thirtyDaysAgo)
             ->selectRaw('
                 SUM(total_price) as total_price,

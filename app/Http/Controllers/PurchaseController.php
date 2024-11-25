@@ -23,12 +23,7 @@ class PurchaseController extends Controller
 
     public function store(PurchaseRequest $request)
     {
-        $data = array_merge(
-            $request->validated(),
-            ['tenant_id' => auth()->user()->tenant->id]
-        );
-
-        $purchase = Purchase::create($data);
+        $purchase = Purchase::create($request->validated());
 
         return to_route('purchases.edit', $purchase->sequential)
             ->with('success', 'Compra criada com sucesso!');
@@ -70,11 +65,8 @@ class PurchaseController extends Controller
 
     private function getDataTable()
     {
-        $tenantId = auth()->user()->tenant->id;
-
         $query = Purchase::query()
             ->with(['supplier', 'payables'])
-            ->where('tenant_id', $tenantId)
             ->select('purchases.*');
 
         return DataTables::eloquent($query)
@@ -96,7 +88,6 @@ class PurchaseController extends Controller
     private function getPurchaseBySequential(string $sequential): Purchase
     {
         return Purchase::query()
-            ->where('tenant_id', auth()->user()->tenant->id)
             ->where('sequential', $sequential)
             ->firstOrFail();
     }

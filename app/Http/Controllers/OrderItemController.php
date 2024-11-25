@@ -37,7 +37,6 @@ class OrderItemController extends Controller
             'unit_cost' => $product->cost_price,
             'total_cost' => $validated['quantity'] * $product->cost_price,
             'total_price' => $validated['quantity'] * $validated['unit_price'],
-            'tenant_id' => auth()->user()->tenant->id,
             'created_by' => auth()->id(),
         ]));
 

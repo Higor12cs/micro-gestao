@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToTenant;
 use App\Traits\HasSequentialFieldTrait;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Purchase extends Model
 {
-    use HasFactory, HasSequentialFieldTrait, HasUlids, SoftDeletes;
+    use BelongsToTenant, HasFactory, HasSequentialFieldTrait, HasUlids, SoftDeletes;
 
     protected $fillable = [
         'tenant_id',

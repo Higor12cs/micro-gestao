@@ -20,7 +20,8 @@ class UserController extends Controller
 
     public function search(Request $request)
     {
-        $users = User::where('tenant_id', auth()->user()->tenant->id)
+        $users = User::query()
+            ->where('tenant_id', auth()->user()->tenant_id)
             ->where('name', 'like', "%{$request->input('search')}%")
             ->limit(10)
             ->get()
@@ -34,7 +35,8 @@ class UserController extends Controller
 
     public function index()
     {
-        $query = User::where('tenant_id', auth()->user()->tenant->id);
+        $query = User::query()
+            ->where('tenant_id', auth()->user()->tenant_id);
 
         return DataTables::of($query)
             ->editColumn('sequential', fn ($user) => str_pad($user->sequential, 5, '0', STR_PAD_LEFT))
@@ -55,8 +57,8 @@ class UserController extends Controller
             throw ValidationException::withMessages(['password' => 'O campo é obrigatório.']);
         }
 
-        $data['tenant_id'] = auth()->user()->tenant->id;
         $data['active'] = $request->boolean('active');
+        $data['tenant_id'] = auth()->user()->tenant_id;
 
         $user = User::create($data);
 
@@ -65,7 +67,8 @@ class UserController extends Controller
 
     public function show(string $sequential)
     {
-        $user = User::where('tenant_id', auth()->user()->tenant->id)
+        $user = User::query()
+            ->where('tenant_id', auth()->user()->tenant_id)
             ->where('sequential', $sequential)
             ->firstOrFail();
 
@@ -74,7 +77,8 @@ class UserController extends Controller
 
     public function update(UserRequest $request, string $sequential)
     {
-        $user = User::where('tenant_id', auth()->user()->tenant->id)
+        $user = User::query()
+            ->where('tenant_id', auth()->user()->tenant_id)
             ->where('sequential', $sequential)
             ->firstOrFail();
 
@@ -92,7 +96,8 @@ class UserController extends Controller
 
     public function destroy(string $sequential)
     {
-        $user = User::where('tenant_id', auth()->user()->tenant->id)
+        $user = User::query()
+            ->where('tenant_id', auth()->user()->tenant_id)
             ->where('sequential', $sequential)
             ->firstOrFail();
 

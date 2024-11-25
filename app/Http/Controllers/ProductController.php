@@ -23,7 +23,6 @@ class ProductController extends Controller
     public function search(Request $request)
     {
         $products = Product::with('stock')
-            ->where('tenant_id', auth()->user()->tenant->id)
             ->where('name', 'like', "%{$request->input('search')}%")
             ->limit(10)
             ->get()
@@ -36,7 +35,6 @@ class ProductController extends Controller
     {
         if ($request->ajax()) {
             $query = Product::with('stock')
-                ->where('tenant_id', auth()->user()->tenant->id)
                 ->select('products.*');
 
             return DataTables::of($query)
@@ -51,9 +49,9 @@ class ProductController extends Controller
                 ->make(true);
         }
 
-        $sections = Section::where('tenant_id', auth()->user()->tenant->id)->get();
-        $groups = Group::where('tenant_id', auth()->user()->tenant->id)->get();
-        $brands = Brand::where('tenant_id', auth()->user()->tenant->id)->get();
+        $sections = Section::query()->get();
+        $groups = Group::query()->get();
+        $brands = Brand::query()->get();
 
         return view('products.index', compact('sections', 'groups', 'brands'));
     }
@@ -61,7 +59,6 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $data = $request->validated();
-        $data['tenant_id'] = auth()->user()->tenant->id;
         $data['active'] = $request->boolean('active');
 
         $product = Product::create($data);

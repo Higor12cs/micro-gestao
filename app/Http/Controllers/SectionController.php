@@ -19,7 +19,7 @@ class SectionController extends Controller
 
     public function search(Request $request)
     {
-        $sections = Section::where('tenant_id', auth()->user()->tenant->id)
+        $sections = Section::query()
             ->where('name', 'like', "%{$request->input('search')}%")
             ->limit(10)
             ->get()
@@ -31,7 +31,7 @@ class SectionController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Section::where('tenant_id', auth()->user()->tenant->id);
+            $query = Section::query();
 
             return DataTables::of($query)
                 ->editColumn('sequential', fn ($section) => str_pad($section->sequential, 5, '0', STR_PAD_LEFT))
@@ -50,7 +50,6 @@ class SectionController extends Controller
     public function store(SectionRequest $request)
     {
         $data = $request->validated();
-        $data['tenant_id'] = auth()->user()->tenant->id;
         $data['active'] = $request->boolean('active');
 
         $section = Section::create($data);

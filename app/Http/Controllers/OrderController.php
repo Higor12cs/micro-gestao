@@ -23,12 +23,7 @@ class OrderController extends Controller
 
     public function store(OrderRequest $request)
     {
-        $data = array_merge(
-            $request->validated(),
-            ['tenant_id' => auth()->user()->tenant->id]
-        );
-
-        $order = Order::create($data);
+        $order = Order::create($request->validated());
 
         return to_route('orders.edit', $order->sequential)
             ->with('success', 'Compra criada com sucesso!');
@@ -70,11 +65,8 @@ class OrderController extends Controller
 
     private function getDataTable()
     {
-        $tenantId = auth()->user()->tenant->id;
-
         $query = Order::query()
             ->with(['customer', 'receivables'])
-            ->where('tenant_id', $tenantId)
             ->select('orders.*');
 
         return DataTables::eloquent($query)
@@ -96,7 +88,6 @@ class OrderController extends Controller
     private function getOrderBySequential(string $sequential): Order
     {
         return Order::query()
-            ->where('tenant_id', auth()->user()->tenant->id)
             ->where('sequential', $sequential)
             ->firstOrFail();
     }

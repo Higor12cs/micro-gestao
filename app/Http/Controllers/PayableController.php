@@ -21,7 +21,6 @@ class PayableController extends Controller
     {
         if ($request->ajax()) {
             $query = Payable::with('supplier')
-                ->where('tenant_id', auth()->user()->tenant->id)
                 ->select('payables.*');
 
             return DataTables::of($query)
@@ -44,10 +43,7 @@ class PayableController extends Controller
 
     public function store(PayableRequest $request)
     {
-        $data = $request->validated();
-        $data['tenant_id'] = auth()->user()->tenant->id;
-
-        $payable = Payable::create($data);
+        $payable = Payable::create($request->validated());
 
         return to_route('payables.edit', ['sequential' => $payable->sequential]);
     }
