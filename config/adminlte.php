@@ -369,7 +369,7 @@ return [
                     'icon' => 'nav-icon fas fa-angle-double-up',
                 ],
                 [
-                    'text' => 'Contas e Caixas',
+                    'text' => 'Contas',
                     'route' => 'accounts.index',
                     'icon' => 'nav-icon fas fa-university',
                 ],
@@ -448,6 +448,12 @@ return [
         [
             'text' => 'Usuários',
             'route' => 'users.index',
+            'icon' => 'nav-icon fas fa-users',
+        ],
+        [
+            'text' => 'Vendedores',
+            'url' => '#',
+            'label' => 'Em Breve', 
             'icon' => 'nav-icon fas fa-users',
         ],
         [

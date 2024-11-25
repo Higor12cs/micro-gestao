@@ -48,7 +48,7 @@
                                     <i class="{{ $submenu['icon'] }} fa-2x mr-3"></i>
                                     <h5 class="card-title mb-0">{{ $submenu['text'] }}</h5>
                                 </div>
-                                <a href="{{ $submenu['route'] ?? $submenu['url'] }}"
+                                <a href="{{ isset($submenu['route']) ? route($submenu['route']) : $submenu['url'] }}"
                                     class="btn btn-primary mt-auto">Acessar</a>
                             </div>
                         </div>
