@@ -12,7 +12,8 @@ class UpdateStockOnPurchaseItemCreated
 
         $stock->updateStock(
             $event->purchaseItem->quantity,
-            'increment',
+            'PURCHASE_ITEM_CREATED',
+            'Item de Compra Criado',
             [
                 'purchase_item_id' => $event->purchaseItem->id,
                 'unit_cost' => $event->purchaseItem->unit_cost,

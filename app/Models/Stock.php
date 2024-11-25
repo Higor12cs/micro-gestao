@@ -29,7 +29,7 @@ class Stock extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function updateStock(float $quantity, string $type, array $movementData): void
+    public function updateStock(float $quantity, string $type, string $observation, array $movementData): void
     {
         $this->stock_total += $quantity;
         $this->save();
@@ -39,6 +39,7 @@ class Stock extends Model
             'product_id' => $this->product_id,
             'quantity' => abs($quantity),
             'type' => $type,
+            'observation' => $observation,
         ]));
     }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\KardexController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\OrderReceivableController;
@@ -35,6 +36,10 @@ Route::middleware('auth')->group(function () {
     Route::view('/contas', 'accounts.index')->name('accounts.index');
 
     Route::get('/produtos', [ProductController::class, 'index'])->name('products.index');
+
+    Route::view('/kardex', 'kardex.index')->name('kardex.index');
+    Route::post('kardex', [KardexController::class, 'show'])->name('kardex.show');
+    Route::get('kardex/{product}', [KardexController::class, 'getMovements'])->name('kardex.movements');
 
     Route::get('/pedidos', [OrderController::class, 'index'])->name('orders.index');
     Route::view('/pedidos/nova', 'orders.create')->name('orders.create');

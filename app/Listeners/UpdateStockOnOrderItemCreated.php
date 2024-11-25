@@ -12,7 +12,8 @@ class UpdateStockOnOrderItemCreated
 
         $stock->updateStock(
             -$event->orderItem->quantity,
-            'order_item_created',
+            'ORDER_ITEM_CREATED',
+            'Item de Pedido Criado',
             [
                 'order_item_id' => $event->orderItem->id,
                 'unit_cost' => $event->orderItem->unit_price,

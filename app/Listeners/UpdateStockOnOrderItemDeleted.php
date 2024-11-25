@@ -12,7 +12,8 @@ class UpdateStockOnOrderItemDeleted
 
         $stock->updateStock(
             $event->orderItem->quantity,
-            'order_item_deleted',
+            'ORDER_ITEM_DELETED',
+            'Item de Pedido Excluído',
             [
                 'order_item_id' => $event->orderItem->id,
                 'unit_cost' => $event->orderItem->unit_price,

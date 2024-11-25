@@ -14,7 +14,8 @@ class UpdateStockOnPurchaseItemDeleted
 
         $stock->updateStock(
             -$event->purchaseItem->quantity,
-            'decrement',
+            'PURCHASE_ITEM_DELETED',
+            'Item de Compra Excluído',
             [
                 'purchase_item_id' => $event->purchaseItem->id,
                 'unit_cost' => $event->purchaseItem->unit_cost,

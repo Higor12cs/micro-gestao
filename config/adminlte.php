@@ -385,8 +385,7 @@ return [
         ],
         [
             'text' => 'Kardex',
-            'url' => '#',
-            'label' => 'Em Breve',
+            'route' => 'kardex.index',
             'icon' => 'nav-icon fas fa-dolly',
         ],
         [
