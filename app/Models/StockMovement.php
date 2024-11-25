@@ -17,7 +17,6 @@ class StockMovement extends Model
         'tenant_id',
         'product_id',
         'order_item_id',
-        'trial_item_id',
         'purchase_item_id',
         'quantity',
         'unit_cost',
@@ -51,11 +50,6 @@ class StockMovement extends Model
     {
         return $this->belongsTo(OrderItem::class);
     }
-
-    // public function trialItem()
-    // {
-    //     return $this->belongsTo(TrialItem::class);
-    // }
 
     public function purchaseItem(): BelongsTo
     {

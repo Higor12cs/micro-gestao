@@ -17,7 +17,6 @@ class Stock extends Model
         'tenant_id',
         'product_id',
         'stock_total',
-        'stock_on_trial',
     ];
 
     public function tenant(): BelongsTo
