@@ -17,9 +17,9 @@ return new class extends Migration
             $table->unsignedBigInteger('sequential');
             $table->string('name');
             $table->string('barcode')->nullable();
-            $table->foreignId('section_id')->nullable()->constrained();
-            $table->foreignId('group_id')->nullable()->constrained();
-            $table->foreignId('brand_id')->nullable()->constrained();
+            $table->foreignUlid('section_id')->nullable()->constrained();
+            $table->foreignUlid('group_id')->nullable()->constrained();
+            $table->foreignUlid('brand_id')->nullable()->constrained();
             $table->decimal('cost_price', 10, 2)->default(0);
             $table->decimal('sale_price', 10, 2)->default(0);
             $table->decimal('minimum_stock', 10, 2)->default(0);

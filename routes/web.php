@@ -38,8 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/produtos', [ProductController::class, 'index'])->name('products.index');
 
     Route::view('/kardex', 'kardex.index')->name('kardex.index');
-    Route::post('kardex', [KardexController::class, 'show'])->name('kardex.show');
-    Route::get('kardex/{product}', [KardexController::class, 'getMovements'])->name('kardex.movements');
+    Route::post('/kardex', [KardexController::class, 'show'])->name('kardex.show');
+    Route::get('/kardex/{product}', [KardexController::class, 'getMovements'])->name('kardex.movements');
 
     Route::get('/pedidos', [OrderController::class, 'index'])->name('orders.index');
     Route::view('/pedidos/nova', 'orders.create')->name('orders.create');
