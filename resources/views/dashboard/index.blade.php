@@ -13,6 +13,7 @@
                 </ol>
             </nav>
         </div>
+        <span class="text-muted">Últimos 30 Dias</span>
     </div>
 @stop
 
