@@ -13,8 +13,6 @@ class OrderReportController extends Controller
     {
         $dates = explode(' - ', $request->date);
 
-        dd($dates);
-
         $orders = Order::whereBetween('date', [
             now()->parse($dates[0])->startOfDay(),
             now()->parse($dates[1])->endOfDay()
