@@ -18,11 +18,15 @@ class KardexController extends Controller
             'exists' => 'O registro informado não foi encontrado.',
         ]);
 
-        return redirect()->route('kardex.index', ['product' => $request->product_id]);
+        $product = Product::findOrFail($request->product_id);
+
+        return redirect()->route('kardex.index', ['product' => $product->sequential, 'test' => 'test']);
     }
 
-    public function getMovements(Product $product)
+    public function getMovements(string $id)
     {
+        $product = $this->getProductBySequential($id);
+
         $movements = StockMovement::where('product_id', $product->id)
             ->with([
                 'orderItem.order' => fn ($query) => $query->withTrashed(),

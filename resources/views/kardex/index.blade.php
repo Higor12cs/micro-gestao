@@ -20,6 +20,7 @@
 @stop
 
 @section('content')
+    @dump(request()->all())
     <div class="card">
         <div class="card-body">
             <form action="{{ route('kardex.show') }}" method="POST">

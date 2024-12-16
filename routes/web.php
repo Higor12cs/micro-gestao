@@ -15,6 +15,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PurchaseItemController;
 use App\Http\Controllers\PurchasePayableController;
 use App\Http\Controllers\ReceivableController;
+use App\Http\Controllers\Report\OrderReportController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
@@ -37,7 +38,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/produtos', [ProductController::class, 'index'])->name('products.index');
 
-    Route::view('/kardex', 'kardex.index')->name('kardex.index');
+    Route::view('/kardex/{product:sequential?}', 'kardex.index')->name('kardex.index');
     Route::post('/kardex', [KardexController::class, 'show'])->name('kardex.show');
     Route::get('/kardex/{product}', [KardexController::class, 'getMovements'])->name('kardex.movements');
 
@@ -70,6 +71,11 @@ Route::middleware('auth')->group(function () {
     Route::view('/secoes', 'sections.index')->name('sections.index');
     Route::view('/grupos', 'groups.index')->name('groups.index');
     Route::view('/marcas', 'brands.index')->name('brands.index');
+
+    Route::prefix('/relatorios')->as('reports.')->group(function () {
+        Route::view('/pedidos', 'reports.orders.index')->name('orders.index');
+        Route::post('/pedidos/relatorio', [OrderReportController::class, 'report'])->name('orders.report');
+    });
 
     Route::view('/usuarios', 'users.index')->name('users.index');
 

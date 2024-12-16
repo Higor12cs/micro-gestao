@@ -423,8 +423,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Vendas',
-                    'url' => '#',
-                    'label' => 'Em Breve',
+                    'route' => 'reports.orders.index',
                     'icon' => 'nav-icon fas fa-chart-line',
                 ],
                 [
