@@ -27,7 +27,11 @@
             <form action="{{ route('reports.orders.report') }}" method="POST" target="_blank">
                 @csrf
                 <x-adminlte-date-range name="date" />
-                <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-print"></i>
+                    &nbsp;
+                    Gerar Relatório
+                </button>
             </form>
         </div>
     </div>

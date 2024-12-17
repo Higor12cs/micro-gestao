@@ -71,8 +71,16 @@
         <span>Tem certeza que deseja excluir este registro?</span>
 
         <x-slot name="footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            <button type="button" id="confirm-delete" class="btn btn-danger">Excluir</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                <i class="fas fa-times"></i>
+                &nbsp;
+                Cancelar
+            </button>
+            <button type="button" id="confirm-delete" class="btn btn-danger">
+                <i class="fas fa-trash"></i>
+                &nbsp;
+                Excluir
+            </button>
         </x-slot>
     </x-modal>
 @stop

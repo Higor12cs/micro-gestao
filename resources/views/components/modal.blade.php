@@ -26,8 +26,16 @@
                 </div>
             @else
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" form="crud-form" class="btn btn-primary">Salvar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <i class="fas fa-times"></i>
+                        &nbsp;
+                        Cancelar
+                    </button>
+                    <button type="submit" form="crud-form" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        &nbsp;
+                        Salvar
+                    </button>
                 </div>
             @endisset
         </div>

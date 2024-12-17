@@ -56,19 +56,22 @@
 
             <input name="created_by" value="{{ auth()->id() }}" type="hidden" />
         </form>
-
-        <x-slot name="footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            <button type="submit" form="crud-form" class="btn btn-primary">Salvar</button>
-        </x-slot>
     </x-modal>
 
     <x-modal id="confirm-delete-modal" title="Excluir Registro" size="md">
         <span>Tem certeza que deseja excluir este registro?</span>
 
         <x-slot name="footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            <button type="button" id="confirm-delete" class="btn btn-danger">Excluir</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                <i class="fas fa-times"></i>
+                &nbsp;
+                Cancelar
+            </button>
+            <button type="button" id="confirm-delete" class="btn btn-danger">
+                <i class="fas fa-trash"></i>
+                &nbsp;
+                Excluir
+            </button>
         </x-slot>
     </x-modal>
 @stop

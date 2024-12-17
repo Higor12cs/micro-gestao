@@ -74,7 +74,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('/relatorios')->as('reports.')->group(function () {
         Route::view('/pedidos', 'reports.orders.index')->name('orders.index');
-        Route::post('/pedidos/relatorio', [OrderReportController::class, 'report'])->name('orders.report');
+        Route::post('/pedidos/imprimir', [OrderReportController::class, 'report'])->name('orders.report');
     });
 
     Route::view('/usuarios', 'users.index')->name('users.index');
