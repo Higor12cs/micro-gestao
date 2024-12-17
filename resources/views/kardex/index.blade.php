@@ -20,10 +20,9 @@
 @stop
 
 @section('content')
-    @dump(request()->all())
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('kardex.show') }}" method="POST">
+            <form action="{{ route('kardex.redirect') }}" method="POST">
                 @csrf
 
                 <div class="row">
@@ -44,9 +43,9 @@
         </div>
     </div>
 
-    @if (request()->has('product'))
+    @if ($product)
         <div class="card mt-3">
-            <div class="card-header">Movimentações do Produto</div>
+            <div class="card-header">Movimentações do Produto: {{ $product->name }}</div>
             <div class="card-body">
                 <table id="kardex-table" class="table table-bordered table-hover text-nowrap">
                     <thead>
@@ -97,11 +96,11 @@
                 document.querySelector('.select2-search__field').focus();
             });
 
-            @if (request()->has('product'))
+            @if ($product)
                 $('#kardex-table').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: '{{ route('kardex.movements', ['product' => request('product')]) }}',
+                    ajax: '{{ route('kardex.movements', ['product' => $product->sequential]) }}',
                     language: {
                         url: '{{ asset('translations/dataTables_pt-BR.json') }}',
                     },

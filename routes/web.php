@@ -38,12 +38,12 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/produtos', [ProductController::class, 'index'])->name('products.index');
 
-    Route::view('/kardex/{product:sequential?}', 'kardex.index')->name('kardex.index');
-    Route::post('/kardex', [KardexController::class, 'show'])->name('kardex.show');
-    Route::get('/kardex/{product}', [KardexController::class, 'getMovements'])->name('kardex.movements');
+    Route::get('/kardex/{product:sequential?}', [KardexController::class, 'index'])->name('kardex.index');
+    Route::post('/kardex', [KardexController::class, 'redirectToProduct'])->name('kardex.redirect');
+    Route::get('/kardex/movements/{product:sequential}', [KardexController::class, 'getMovements'])->name('kardex.movements');
 
     Route::get('/pedidos', [OrderController::class, 'index'])->name('orders.index');
-    Route::view('/pedidos/nova', 'orders.create')->name('orders.create');
+    Route::view('/pedidos/novo', 'orders.create')->name('orders.create');
     Route::post('/pedidos', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/pedidos/{sequential}', [OrderController::class, 'show'])->name('orders.show');
     Route::get('/pedidos/{sequential}/editar', [OrderController::class, 'edit'])->name('orders.edit');

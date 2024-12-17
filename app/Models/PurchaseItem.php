@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Events\PurchaseItemCreated;
-use App\Events\PurchaseItemDeleted;
 use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,11 +25,6 @@ class PurchaseItem extends Model
         'created_by',
     ];
 
-    protected $dispatchesEvents = [
-        'created' => PurchaseItemCreated::class,
-        'deleted' => PurchaseItemDeleted::class,
-    ];
-
     public function tenant(): BelongsTo
     {
         return $this->belongsTo(Tenant::class);
@@ -50,5 +43,10 @@ class PurchaseItem extends Model
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function calculateTotalCost(): float
+    {
+        return $this->quantity * $this->unit_cost;
     }
 }

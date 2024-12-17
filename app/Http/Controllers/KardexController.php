@@ -9,24 +9,26 @@ use Yajra\DataTables\Facades\DataTables;
 
 class KardexController extends Controller
 {
-    public function show(Request $request)
+    public function index(?Product $product = null)
+    {
+        return view('kardex.index', [
+            'product' => $product,
+        ]);
+    }
+
+    public function redirectToProduct(Request $request)
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
-        ], [
-            'required' => 'O campo é obrigatório.',
-            'exists' => 'O registro informado não foi encontrado.',
         ]);
 
         $product = Product::findOrFail($request->product_id);
 
-        return redirect()->route('kardex.index', ['product' => $product->sequential, 'test' => 'test']);
+        return redirect()->route('kardex.index', ['product' => $product->sequential]);
     }
 
-    public function getMovements(string $id)
+    public function getMovements(Product $product)
     {
-        $product = $this->getProductBySequential($id);
-
         $movements = StockMovement::where('product_id', $product->id)
             ->with([
                 'orderItem.order' => fn ($query) => $query->withTrashed(),
@@ -55,12 +57,5 @@ class KardexController extends Controller
                 return '-';
             })
             ->make(true);
-    }
-
-    private function getProductBySequential(string $sequential): Product
-    {
-        return Product::query()
-            ->where('sequential', $sequential)
-            ->firstOrFail();
     }
 }

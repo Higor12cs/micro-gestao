@@ -15,7 +15,7 @@ class OrderReportController extends Controller
 
         $orders = Order::whereBetween('date', [
             now()->parse($dates[0])->startOfDay(),
-            now()->parse($dates[1])->endOfDay()
+            now()->parse($dates[1])->endOfDay(),
         ])->get();
 
         $pdf = Pdf::loadView('reports.orders.report', compact('orders'));

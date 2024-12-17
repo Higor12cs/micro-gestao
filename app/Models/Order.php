@@ -59,10 +59,15 @@ class Order extends Model
         return $this->hasMany(Receivable::class);
     }
 
-    public function hasReceivables()
+    public function hasReceivables(): bool
     {
         return $this->relationLoaded('receivables')
             ? $this->receivables->isNotEmpty()
             : $this->receivables()->exists();
+    }
+
+    public function calculateTotalPrice(): float
+    {
+        return $this->total_cost + $this->freight - $this->discount;
     }
 }

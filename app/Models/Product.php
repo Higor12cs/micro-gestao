@@ -74,4 +74,9 @@ class Product extends Model
     {
         return $this->hasOne(Stock::class);
     }
+
+    public function getRouteKeyName(): string
+    {
+        return 'sequential';
+    }
 }
