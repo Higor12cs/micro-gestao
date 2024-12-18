@@ -68,7 +68,8 @@
 
             <h5 id="total-display" class="mt-3">Total: R$ 0,00</h5>
 
-            <a href="{{ route('purchases.payables.index', $purchase->sequential) }}" class="btn btn-primary mt-3">Pagáveis</a>
+            <a href="{{ route('purchases.payables.index', $purchase->sequential) }}"
+                class="btn btn-primary mt-3">Pagáveis</a>
         </div>
     </div>
 @stop

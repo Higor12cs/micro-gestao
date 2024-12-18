@@ -11,11 +11,11 @@ class OrderItemController extends Controller
 {
     use TenantAuthorization;
 
-    protected OrderItemService $orderItemService;
+    protected OrderItemService $service;
 
-    public function __construct(OrderItemService $orderItemService)
+    public function __construct(OrderItemService $service)
     {
-        $this->orderItemService = $orderItemService;
+        $this->service = $service;
     }
 
     public function index(Order $order)
@@ -29,7 +29,7 @@ class OrderItemController extends Controller
     {
         $this->authorizeTenantAccess($order);
 
-        $this->orderItemService->create($order, $request->validate([
+        $this->service->create($order, $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|numeric|min:1',
             'unit_price' => 'required|numeric|min:0.01',
@@ -42,7 +42,7 @@ class OrderItemController extends Controller
     {
         $this->authorizeTenantAccess($order);
 
-        $this->orderItemService->delete($orderItemId);
+        $this->service->delete($orderItemId);
 
         return response()->json(['success' => true]);
     }
