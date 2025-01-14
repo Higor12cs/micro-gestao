@@ -2,6 +2,8 @@
 
 @section('title', 'Dashboard')
 
+@section('plugins.Chartjs', true)
+
 @section('content_header')
     <div class="d-flex justify-content-between">
         <div>
@@ -72,4 +74,87 @@
             </div>
         </div>
     </div>
+
+    <div class="card">
+        <div class="card-header">Faturamento</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <canvas id="chart1" width="400" height="300"></canvas>
+                </div>
+                <div class="col-md-6">
+                    <canvas id="chart2" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
+
+@section('js')
+    <script>
+        var chart1 = document.getElementById('chart1').getContext('2d');
+        var chart2 = document.getElementById('chart2').getContext('2d');
+
+        var salesThisYearPerMonth = @json($salesThisYearPerMonth);
+        var salesLast30DaysPerDay = @json($salesLast30DaysPerDay);
+
+        var months = salesThisYearPerMonth.map(function(item) {
+            return item.month;
+        });
+        var salesThisYearData = salesThisYearPerMonth.map(function(item) {
+            return item.total_price;
+        });
+
+        var days = salesLast30DaysPerDay.map(function(item) {
+            return item.day;
+        });
+        var salesLast30DaysData = salesLast30DaysPerDay.map(function(item) {
+            return item.total_price;
+        });
+
+        new Chart(chart1, {
+            type: 'bar',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Faturamento Mensal (Ano Atual)',
+                    data: salesThisYearData,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderWidth: 1,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        new Chart(chart2, {
+            type: 'bar',
+            data: {
+                labels: days,
+                datasets: [{
+                    label: 'Faturamento Diário (Últimos 30 Dias)',
+                    data: salesLast30DaysData,
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+@endsection

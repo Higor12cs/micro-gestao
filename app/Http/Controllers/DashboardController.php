@@ -28,11 +28,31 @@ class DashboardController extends Controller
         $orderCount = $salesData->order_count;
         $averageTicket = $salesData->average_ticket;
 
+        $salesThisYearPerMonth = Order::query()
+            ->where('date', '>=', Carbon::now()->startOfYear())
+            ->selectRaw('
+                SUM(total_price) as total_price,
+                MONTH(date) as month
+            ')
+            ->groupBy('month')
+            ->get();
+
+        $salesLast30DaysPerDay = Order::query()
+            ->where('date', '>=', $thirtyDaysAgo)
+            ->selectRaw('
+                SUM(total_price) as total_price,
+                DATE(date) as day
+            ')
+            ->groupBy('day')
+            ->get();
+
         return view('dashboard.index', [
             'total_price' => $total_price,
             'contributionMarginPercentage' => $contributionMarginPercentage,
             'orderCount' => $orderCount,
             'averageTicket' => $averageTicket,
+            'salesThisYearPerMonth' => $salesThisYearPerMonth,
+            'salesLast30DaysPerDay' => $salesLast30DaysPerDay,
         ]);
     }
 }

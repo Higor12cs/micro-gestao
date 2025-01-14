@@ -18,7 +18,7 @@ return [
 
     'title' => $title,
     'title_prefix' => '',
-    'title_postfix' => ' | '.$title,
+    'title_postfix' => ' | ' . $title,
 
     /*
     |--------------------------------------------------------------------------
@@ -503,6 +503,16 @@ return [
     */
 
     'plugins' => [
+        'Chartjs' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js',
+                ],
+            ],
+        ],
         'DateRangePicker' => [
             'active' => false,
             'files' => [
