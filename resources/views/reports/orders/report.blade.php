@@ -43,7 +43,8 @@
 <body>
     <div class="header">
         <h1>Relatório de Pedidos</h1>
-        <p>Data: {{ \Carbon\Carbon::now()->format('d/m/Y') }}</p>
+        <p>Data Emissão: {{ \Carbon\Carbon::now()->format('d/m/Y H:i:s') }}</p>
+        <p>Período: {{ $startDate }} | {{ $endDate }}</p>
     </div>
     <table class="table">
         <thead>

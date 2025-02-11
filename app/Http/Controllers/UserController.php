@@ -90,10 +90,14 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        $this->authorizeTenantAccess($user);
+        // $this->authorizeTenantAccess($user);
 
-        $user->delete();
+        // $user->delete();
 
-        return response()->json(null, 204);
+        // return response()->json(null, 204);
+
+        return response()->json([
+            'message' => 'Esta funcionalidade ainda nao foi implementada.'
+        ], 501);
     }
 }

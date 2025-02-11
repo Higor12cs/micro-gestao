@@ -23,6 +23,26 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
+        \App\Models\Supplier::create([
+            'tenant_id' => $tenant->id,
+            'first_name' => 'Fornecedor Teste',
+            'created_by' => $user->id,
+        ]);
+
+        \App\Models\Customer::create([
+            'tenant_id' => $tenant->id,
+            'first_name' => 'Cliente Teste',
+            'created_by' => $user->id,
+        ]);
+
+        \App\Models\Product::create([
+            'tenant_id' => $tenant->id,
+            'name' => 'Produto Teste',
+            'cost_price' => 100,
+            'sale_price' => 200,
+            'created_by' => $user->id,
+        ]);
+
         // for ($i = 1; $i <= 20; $i++) {
         //     \App\Models\Supplier::create([
         //         'tenant_id' => $tenant->id,

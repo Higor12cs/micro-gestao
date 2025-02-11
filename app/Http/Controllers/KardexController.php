@@ -31,8 +31,9 @@ class KardexController extends Controller
     {
         $movements = StockMovement::where('product_id', $product->id)
             ->with([
-                'orderItem.order' => fn ($query) => $query->withTrashed(),
-                'purchaseItem.purchase' => fn ($query) => $query->withTrashed(),
+                'orderItem.order' => fn($query) => $query->withTrashed(),
+                'purchaseItem.purchase' => fn($query) => $query->withTrashed(),
+                'createdBy',
             ]);
 
         return DataTables::of($movements)
@@ -42,20 +43,21 @@ class KardexController extends Controller
                     'timestamp' => $movement->created_at->timestamp,
                 ];
             })
-            ->addColumn('type', fn ($movement) => strtoupper($movement->type))
-            ->addColumn('quantity', fn ($movement) => $movement->quantity)
-            ->addColumn('unit_cost', fn ($movement) => 'R$ '.number_format($movement->unit_cost, 2, ',', '.'))
-            ->addColumn('total_cost', fn ($movement) => 'R$ '.number_format($movement->total_cost, 2, ',', '.'))
+            ->addColumn('type', fn($movement) => strtoupper($movement->type))
+            ->addColumn('quantity', fn($movement) => $movement->quantity)
+            ->addColumn('unit_cost', fn($movement) => 'R$ ' . number_format($movement->unit_cost, 2, ',', '.'))
+            ->addColumn('total_cost', fn($movement) => 'R$ ' . number_format($movement->total_cost, 2, ',', '.'))
             ->addColumn('related_document', function ($movement) {
                 if ($movement->orderItem) {
-                    return 'Pedido #'.$movement->orderItem->order->sequential;
+                    return 'Pedido #' . $movement->orderItem->order->sequential;
                 }
                 if ($movement->purchaseItem) {
-                    return 'Compra #'.$movement->purchaseItem->purchase->sequential;
+                    return 'Compra #' . $movement->purchaseItem->purchase->sequential;
                 }
 
                 return '-';
             })
+            ->addColumn('created_by', fn($movement) => $movement->createdBy->name)
             ->make(true);
     }
 }

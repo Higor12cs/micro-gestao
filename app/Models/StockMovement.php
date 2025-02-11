@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StockMovement extends Model
 {
-    use BelongsToTenant, HasFactory, HasUlids, SoftDeletes;
+    use BelongsToTenant, HasFactory, HasUlids;
 
     protected $fillable = [
         'tenant_id',

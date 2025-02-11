@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'logo' => '<b>Micro Gestão</b>',
+    'logo' => '<b>Sistema Gestão</b>',
     'logo_img' => '/img/Logo.png',
     'logo_img_class' => 'brand-image',
     'logo_img_xl' => null,

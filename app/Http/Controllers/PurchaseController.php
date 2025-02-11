@@ -59,9 +59,10 @@ class PurchaseController extends Controller
 
     public function destroy(string $sequential)
     {
-        $this->purchaseService->delete($sequential);
+        // $this->purchaseService->delete($sequential);
 
-        return to_route('purchases.index')
-            ->with('success', 'Compra deletada com sucesso!');
+        return response()->json([
+            'message' => 'Esta funcionalidade ainda nao foi implementada.'
+        ], 501);
     }
 }

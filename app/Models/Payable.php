@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Payable extends Model
 {
-    use BelongsToTenant, HasFactory, HasSequentialFieldTrait, HasUlids, SoftDeletes;
+    use BelongsToTenant, HasFactory, HasSequentialFieldTrait, HasUlids;
 
     protected $fillable = [
         'tenant_id',

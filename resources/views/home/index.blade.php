@@ -13,8 +13,8 @@
         $saudacao = 'Boa noite';
     }
 
-    setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
-    $dataPorExtenso = strftime('%A, %d de %B de %Y');
+    $locale = setlocale(LC_TIME, 'pt_BR.UTF-8', 'pt_BR.utf-8', 'portuguese');
+    $dataPorExtenso = utf8_encode(strftime('%A, %d de %B de %Y'));
 @endphp
 
 @section('content_header')

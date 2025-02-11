@@ -59,9 +59,10 @@ class OrderController extends Controller
 
     public function destroy(string $sequential)
     {
-        $this->orderService->deleteOrder($sequential);
+        // $this->orderService->deleteOrder($sequential);
 
-        return to_route('orders.index')
-            ->with('success', 'Pedido deletado com sucesso!');
+        return response()->json([
+            'message' => 'Esta funcionalidade ainda nao foi implementada.'
+        ], 501);
     }
 }

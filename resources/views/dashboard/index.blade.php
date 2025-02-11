@@ -80,10 +80,10 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <canvas id="chart1" width="400" height="300"></canvas>
+                    <canvas id="monthlyChart" width="400" height="200"></canvas>
                 </div>
                 <div class="col-md-6">
-                    <canvas id="chart2" width="400" height="300"></canvas>
+                    <canvas id="dailyChart" width="400" height="200"></canvas>
                 </div>
             </div>
         </div>
@@ -92,8 +92,8 @@
 
 @section('js')
     <script>
-        var chart1 = document.getElementById('chart1').getContext('2d');
-        var chart2 = document.getElementById('chart2').getContext('2d');
+        var monthlyChart = document.getElementById('monthlyChart').getContext('2d');
+        var dailyChart = document.getElementById('dailyChart').getContext('2d');
 
         var salesThisYearPerMonth = @json($salesThisYearPerMonth);
         var salesLast30DaysPerDay = @json($salesLast30DaysPerDay);
@@ -112,7 +112,7 @@
             return item.total_price;
         });
 
-        new Chart(chart1, {
+        new Chart(monthlyChart, {
             type: 'bar',
             data: {
                 labels: months,
@@ -135,7 +135,7 @@
             }
         });
 
-        new Chart(chart2, {
+        new Chart(dailyChart, {
             type: 'bar',
             data: {
                 labels: days,

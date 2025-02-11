@@ -15,9 +15,9 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->foreignUlid('tenant_id')->constrained();
             $table->foreignUlid('product_id')->constrained();
-            $table->foreignUlid('order_item_id')->nullable()->constrained();
-            $table->foreignUlid('trial_item_id')->nullable();
-            $table->foreignUlid('purchase_item_id')->nullable()->constrained();
+            $table->foreignUlid('order_item_id')->nullable()->nullOnDelete();
+            $table->foreignUlid('trial_item_id')->nullable()->nullOnDelete();
+            $table->foreignUlid('purchase_item_id')->nullable()->nullOnDelete();
             $table->decimal('quantity', 10, 2)->default(0);
             $table->decimal('unit_cost', 10, 2)->default(0);
             $table->decimal('total_cost', 10, 2)->default(0);

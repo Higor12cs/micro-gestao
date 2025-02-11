@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use BelongsToTenant, HasFactory, HasSequentialFieldTrait, HasUlids, SoftDeletes;
+    use BelongsToTenant, HasFactory, HasSequentialFieldTrait, HasUlids;
 
     protected $fillable = [
         'tenant_id',

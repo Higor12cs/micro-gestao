@@ -14,7 +14,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, HasSequentialFieldTrait, HasUlids, Notifiable, SoftDeletes;
+    use HasFactory, HasSequentialFieldTrait, HasUlids, Notifiable;
 
     protected $fillable = [
         'tenant_id',

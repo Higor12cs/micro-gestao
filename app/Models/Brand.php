@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Brand extends Model
 {
-    use BelongsToTenant, HasFactory, HasSequentialFieldTrait, HasUlids, SoftDeletes;
+    use BelongsToTenant, HasFactory, HasSequentialFieldTrait, HasUlids;
 
     protected $fillable = ['tenant_id', 'sequential', 'name', 'active', 'created_by'];
 

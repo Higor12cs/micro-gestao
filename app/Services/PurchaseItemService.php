@@ -42,7 +42,7 @@ class PurchaseItemService
     private function recalculatePurchaseTotal(Purchase $purchase): void
     {
         $purchase->update([
-            'total_cost' => $purchase->items()->sum('total_cost'),
+            'total' => $purchase->items()->sum('total_cost'),
         ]);
     }
 

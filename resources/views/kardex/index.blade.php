@@ -56,6 +56,7 @@
                             <th>Custo Unitário</th>
                             <th>Custo Total</th>
                             <th>Documento Relacionado</th>
+                            <th>Usuário</th>
                         </tr>
                     </thead>
                 </table>
@@ -127,6 +128,10 @@
                         {
                             data: 'related_document',
                             name: 'related_document'
+                        },
+                        {
+                            data: 'created_by',
+                            name: 'created_by'
                         },
                     ],
                     columnDefs: [{
