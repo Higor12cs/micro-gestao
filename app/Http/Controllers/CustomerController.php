@@ -31,7 +31,7 @@ class CustomerController extends Controller
             ->get(['id', 'first_name']);
 
         return response()->json(
-            $customers->map(fn ($customer) => ['id' => $customer->id, 'text' => $customer->first_name])
+            $customers->map(fn($customer) => ['id' => $customer->id, 'text' => $customer->first_name])
         );
     }
 
@@ -41,8 +41,8 @@ class CustomerController extends Controller
             $query = Customer::query();
 
             return DataTables::of($query)
-                ->editColumn('sequential', fn ($customer) => str_pad($customer->sequential, 5, '0', STR_PAD_LEFT))
-                ->addColumn('actions', fn ($customer) => view('partials.actions', [
+                ->editColumn('sequential', fn($customer) => str_pad($customer->sequential, 5, '0', STR_PAD_LEFT))
+                ->addColumn('actions', fn($customer) => view('partials.actions', [
                     'id' => $customer->id,
                     'sequential' => $customer->sequential,
                     'entity' => 'customers',
@@ -79,6 +79,10 @@ class CustomerController extends Controller
     public function destroy(Customer $customer)
     {
         $this->authorizeTenantAccess($customer);
+
+        if ($customer->orders()->exists()) {
+            return response()->json(['message' => 'Este cliente possui registros associados e não pode ser excluído.'], 400);
+        }
 
         $customer->delete();
 

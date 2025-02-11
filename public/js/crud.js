@@ -1,3 +1,26 @@
+function showToast(icon, title) {
+  Swal.fire({
+    icon: icon,
+    title: title,
+    showConfirmButton: false,
+    showCloseButton: true,
+    timer: 3000,
+    timerProgressBar: true,
+    toast: true,
+    position: "top-end",
+    showClass: {
+      popup: "animate__animated animate__fadeInRight",
+    },
+    hideClass: {
+      popup: "animate__animated animate__fadeOutRight",
+    },
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
+}
+
 function refreshDataTables() {
   $(".data-table").each(function () {
     $(this).DataTable().ajax.reload(null, false);
@@ -64,6 +87,15 @@ function openModal(modalTitle, formAction, method = "POST", data = {}) {
 
 function handleAjaxError(xhr) {
   console.error("Error:", xhr.responseText);
+
+  if (xhr.responseJSON && xhr.responseJSON.message) {
+    showToast("error", xhr.responseJSON.message);
+  } else {
+    showToast("error", `Ocorreu um erro do código ${xhr.status}.`);
+  }
+
+  $("#crud-modal").modal("hide");
+  $("#confirm-delete-modal").modal("hide");
 }
 
 $(document).ready(function () {
@@ -121,6 +153,7 @@ $(document).ready(function () {
           success: function () {
             $("#confirm-delete-modal").modal("hide");
             refreshDataTables();
+            showToast("success", "Registro excluído com sucesso!");
           },
           error: handleAjaxError,
         });
@@ -145,10 +178,11 @@ $(document).ready(function () {
         );
         disableModalInputs(true);
       },
-      success: function () {
+      success: function (response) {
         $("#crud-modal").modal("hide");
         refreshDataTables();
         form[0].reset();
+        showToast("success", "Registro salvo com sucesso!");
       },
       error: function (xhr) {
         if (xhr.status === 422) {

@@ -106,6 +106,10 @@
     {{-- Custom Scripts --}}
     @yield('adminlte_js')
 
+    <script>
+        const Toast = Swal.mixin();
+    </script>
+
 </body>
 
 </html>
