@@ -14,11 +14,11 @@ class DashboardController extends Controller
         $salesData = Order::query()
             ->where('date', '>=', $thirtyDaysAgo)
             ->selectRaw('
-                SUM(total_price) as total_price,
-                SUM(total_cost) as total_cost,
-                COUNT(*) as order_count,
-                AVG(total_price) as average_ticket
-            ')
+            SUM(total_price) as total_price,
+            SUM(total_cost) as total_cost,
+            COUNT(*) as order_count,
+            AVG(total_price) as average_ticket
+        ')
             ->first();
 
         $total_price = $salesData->total_price;
@@ -31,18 +31,18 @@ class DashboardController extends Controller
         $salesThisYearPerMonth = Order::query()
             ->where('date', '>=', Carbon::now()->startOfYear())
             ->selectRaw('
-                SUM(total_price) as total_price,
-                MONTH(date) as month
-            ')
+            SUM(total_price) as total_price,
+            strftime("%m", date) as month
+        ')
             ->groupBy('month')
             ->get();
 
         $salesLast30DaysPerDay = Order::query()
             ->where('date', '>=', $thirtyDaysAgo)
             ->selectRaw('
-                SUM(total_price) as total_price,
-                DATE(date) as day
-            ')
+            SUM(total_price) as total_price,
+            strftime("%Y-%m-%d", date) as day
+        ')
             ->groupBy('day')
             ->get();
 
