@@ -25,7 +25,7 @@ class UserController extends Controller
             ->where('name', 'like', "%{$request->input('search')}%")
             ->limit(10)
             ->get()
-            ->map(fn ($user) => [
+            ->map(fn($user) => [
                 'id' => $user->id,
                 'text' => $user->name,
             ]);
@@ -39,9 +39,9 @@ class UserController extends Controller
             ->where('tenant_id', auth()->user()->tenant_id);
 
         return DataTables::of($query)
-            ->editColumn('sequential', fn ($user) => str_pad($user->sequential, 5, '0', STR_PAD_LEFT))
-            ->editColumn('active', fn ($user) => view('partials.active', ['active' => $user->active]))
-            ->addColumn('actions', fn ($user) => view('partials.actions', [
+            ->editColumn('sequential', fn($user) => str_pad($user->sequential, 5, '0', STR_PAD_LEFT))
+            ->editColumn('active', fn($user) => view('partials.active', ['active' => $user->active]))
+            ->addColumn('actions', fn($user) => view('partials.actions', [
                 'id' => $user->id,
                 'sequential' => $user->sequential,
                 'entity' => 'users',
@@ -65,22 +65,16 @@ class UserController extends Controller
         return response()->json($user, 201);
     }
 
-    public function show(string $sequential)
+    public function show(User $user)
     {
-        $user = User::query()
-            ->where('tenant_id', auth()->user()->tenant_id)
-            ->where('sequential', $sequential)
-            ->firstOrFail();
+        $this->authorizeTenantAccess($user);
 
         return response()->json($user);
     }
 
-    public function update(UserRequest $request, string $sequential)
+    public function update(UserRequest $request, User $user)
     {
-        $user = User::query()
-            ->where('tenant_id', auth()->user()->tenant_id)
-            ->where('sequential', $sequential)
-            ->firstOrFail();
+        $this->authorizeTenantAccess($user);
 
         $data = $request->validated();
         $data['active'] = $request->boolean('active');
@@ -94,12 +88,9 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    public function destroy(string $sequential)
+    public function destroy(User $user)
     {
-        $user = User::query()
-            ->where('tenant_id', auth()->user()->tenant_id)
-            ->where('sequential', $sequential)
-            ->firstOrFail();
+        $this->authorizeTenantAccess($user);
 
         $user->delete();
 
